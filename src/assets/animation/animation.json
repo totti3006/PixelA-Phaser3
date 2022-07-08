@@ -1,0 +1,202 @@
+{
+  "anims": [
+    {
+      "key": "apple-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "apple",
+        "start": 0,
+        "end": 16
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "banana-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "banana",
+        "start": 0,
+        "end": 16
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "cherry-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "cherry",
+        "start": 0,
+        "end": 16
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "kiwi-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "kiwi",
+        "start": 0,
+        "end": 16
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "collected-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "collected",
+        "start": 0,
+        "end": 5
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "box1-break-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "box1-break",
+        "start": 0,
+        "end": 3
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "box1-idle-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "box1-idle",
+        "start": 0,
+        "end": 0
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "box1-hit-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "box1-hit",
+        "start": 0,
+        "end": 2
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "mask-jump-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-jump",
+        "start": 0,
+        "end": 0
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "mask-fall-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-fall",
+        "start": 0,
+        "end": 0
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "mask-djump-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-doublejump",
+        "start": 0,
+        "end": 5
+      },
+      "repeat": 0,
+      "frameRate": 25
+    },
+    {
+      "key": "mask-hit-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-hit",
+        "start": 0,
+        "end": 6
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "mask-idle-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-idle",
+        "start": 0,
+        "end": 10
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "mask-run-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-run",
+        "start": 0,
+        "end": 11
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "dart-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "darts",
+        "start": 0,
+        "end": 7
+      },
+      "repeat": -1,
+      "frameRate": 25
+    },
+    {
+      "key": "mushroom-hit-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mushroom-hit",
+        "start": 0,
+        "end": 4
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "mushroom-idle-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mushroom-idle",
+        "start": 0,
+        "end": 13
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "mushroom-run-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mushroom-run",
+        "start": 0,
+        "end": 15
+      },
+      "repeat": -1,
+      "frameRate": 18
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "preload": {
+    "files": [
+      {
+        "type": "tilemapTiledJSON",
+        "key": "room1",
+        "url": "./assets/maps/room1.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
+        "key": "room2",
+        "url": "./assets/maps/room2.json"
+      },
+      {
+        "type": "json",
+        "key": "animationJSON",
+        "url": "./assets/animation/animation.json"
+      },
+      {
+        "type": "image",
+        "key": "terrain",
+        "url": "./assets/tiles/Terrain(16x16).png"
+      },
+      {
+        "type": "image",
+        "key": "background-brown",
+        "url": "./assets/tiles/Brown.png"
+      },
+      {
+        "type": "image",
+        "key": "background-blue",
+        "url": "./assets/tiles/Blue.png"
+      },
+      {
+        "type": "image",
+        "key": "spikes",
+        "url": "./assets/images/spikes/Idle.png"
+      },
+      {
+        "type": "image",
+        "key": "button-next",
+        "url": "./assets/images/buttons/Next.png"
+      },
+      {
+        "type": "image",
+        "key": "button-previous",
+        "url": "./assets/images/buttons/Previous.png"
+      },
+      {
+        "type": "image",
+        "key": "button-restart",
+        "url": "./assets/images/buttons/Restart.png"
+      },
+      {
+        "type": "image",
+        "key": "title",
+        "url": "./assets/images/title.png"
+      },
+      {
+        "type": "spritesheet",
+        "key": "box1-break",
+        "url": "./assets/sprites/box1/Break.png",
+        "frameConfig": {
+          "frameWidth": 28,
+          "frameHeight": 24
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "box1-hit",
+        "url": "./assets/sprites/box1/Hit(28x24).png",
+        "frameConfig": {
+          "frameWidth": 28,
+          "frameHeight": 24
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "box1-idle",
+        "url": "./assets/sprites/box1/Idle.png",
+        "frameConfig": {
+          "frameWidth": 28,
+          "frameHeight": 24
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "apple",
+        "url": "./assets/sprites/fruits/Apple.png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "banana",
+        "url": "./assets/sprites/fruits/Bananas.png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "cherry",
+        "url": "./assets/sprites/fruits/Cherries.png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "kiwi",
+        "url": "./assets/sprites/fruits/Kiwi.png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "collected",
+        "url": "./assets/sprites/fruits/Collected.png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mask-doublejump",
+        "url": "./assets/sprites/maskDude/DoubleJump(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mask-hit",
+        "url": "./assets/sprites/maskDude/Hit(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mask-idle",
+        "url": "./assets/sprites/maskDude/Idle(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mask-run",
+        "url": "./assets/sprites/maskDude/Run(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mask-fall",
+        "url": "./assets/sprites/maskDude/Fall(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mask-jump",
+        "url": "./assets/sprites/maskDude/Jump(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "font-white",
+        "url": "./assets/font/Text(White)(8x10).png",
+        "frameConfig": {
+          "frameWidth": 8,
+          "frameHeight": 10
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "font-black",
+        "url": "./assets/font/Text(Black)(8x10).png",
+        "frameConfig": {
+          "frameWidth": 8,
+          "frameHeight": 10
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "darts",
+        "url": "./assets/sprites/maskDude/Darts(38x38).png",
+        "frameConfig": {
+          "frameWidth": 38,
+          "frameHeight": 38
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mushroom-idle",
+        "url": "./assets/sprites/mushroom/Idle(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mushroom-hit",
+        "url": "./assets/sprites/mushroom/Hit.png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "mushroom-run",
+        "url": "./assets/sprites/mushroom/Run(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      }
+    ]
+  }
+}
