@@ -4,17 +4,22 @@ import Bullet from './Bullet'
 import DudeState from './DudeState'
 import VirtualBody from './VirtualBody'
 
+type GameObj = Phaser.Types.Physics.Arcade.GameObjectWithBody
+
 class Dude extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
 
   private acceleration: number
   private dudeState: DudeState
   private projectile: Phaser.GameObjects.Group
+  private terrainLayer: Phaser.Tilemaps.TilemapLayer
   private mapHeight: number
 
   private keys: Map<string, Phaser.Input.Keyboard.Key>
 
-  private rect: Phaser.GameObjects.Rectangle
+  // private rect: GameObj
+
+  private onCollideWall: boolean
 
   public getKeys(): Map<string, Phaser.Input.Keyboard.Key> {
     return this.keys
@@ -28,7 +33,24 @@ class Dude extends Phaser.GameObjects.Sprite {
     return this.dudeState
   }
 
-  constructor(aParams: ISpriteConstructor, projectile: Phaser.GameObjects.Group, mapHeight: number) {
+  // public getVirtualBody(): GameObj {
+  //   return this.rect
+  // }
+
+  public isCollideWall(): boolean {
+    return this.onCollideWall
+  }
+
+  public setCollideWall(v: boolean): void {
+    this.onCollideWall = v
+  }
+
+  constructor(
+    aParams: ISpriteConstructor,
+    projectile: Phaser.GameObjects.Group,
+    terrainLayer: Phaser.Tilemaps.TilemapLayer,
+    mapHeight: number
+  ) {
     super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)
 
     this.projectile = projectile
@@ -37,6 +59,8 @@ class Dude extends Phaser.GameObjects.Sprite {
 
     this.acceleration = 700
     this.mapHeight = mapHeight
+    this.onCollideWall = false
+    this.terrainLayer = terrainLayer
 
     this.dudeState = new DudeState(this)
   }
@@ -62,11 +86,7 @@ class Dude extends Phaser.GameObjects.Sprite {
     // this.body.maxVelocity.y = 500
     this.body.setSize(this.width * 0.6, this.height * 0.95).setOffset(6, 2)
 
-    this.rect = new VirtualBody(this.scene, this, this.x, this.y + 5, this.width * 0.9, this.height * 0.8, 0xff0000)
-  }
-
-  public getVirtualBody(): Phaser.GameObjects.Rectangle {
-    return this.rect
+    // this.rect = new VirtualBody(this.scene, this, this.x, this.y + 5, this.width * 0.65, this.height * 0.8, 0xff0000)
   }
 
   private addKey(key: string): Phaser.Input.Keyboard.Key {
@@ -74,9 +94,9 @@ class Dude extends Phaser.GameObjects.Sprite {
   }
 
   update(): void {
-    this.rect.setPosition(this.x, this.y + 5)
+    // this.updateVirtualBody()
 
-    console.log(this.dudeState.currentState().getName())
+    // console.log(this.dudeState.currentState().getName())
     this.dudeState.currentState().onStateExecution()
 
     if (Phaser.Input.Keyboard.JustDown(this.keys?.get('THROW')!)) this.throwDart()
@@ -86,6 +106,15 @@ class Dude extends Phaser.GameObjects.Sprite {
       this.scene.registry.values.score = 0
       this.scene.events.emit('scoreChanged')
     }
+  }
+
+  // updateVirtualBody(): void {
+  //   this.centerBodyOnBody(this.rect.body as Phaser.Physics.Arcade.Body, this.body)
+  //   this.rect.body.velocity.copy(this.body.velocity)
+  // }
+
+  centerBodyOnBody(a: Phaser.Physics.Arcade.Body, b: Phaser.Physics.Arcade.Body): void {
+    a.position.set(b.x + b.halfWidth - a.halfWidth + 1, b.y + b.halfHeight - a.halfHeight)
   }
 
   throwDart(): void {

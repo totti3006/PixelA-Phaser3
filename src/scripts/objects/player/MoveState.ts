@@ -38,14 +38,16 @@ class MoveState extends IState {
   }
 
   onStateExecution(param?: any): void {
+    if (this.player.getKeys().get('JUMP')?.isUp) {
+      this.allowJump = true
+    }
+
     if (this.player.getKeys().get('JUMP')?.isDown && this.allowJump) {
       /*
        * Moving to Jump State
        */
       this.player.getState().advance(DudeStateName.jump)
       this.allowJump = false
-    } else if (this.player.getKeys().get('JUMP')?.isUp) {
-      this.allowJump = true
     }
 
     /*

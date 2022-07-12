@@ -5,6 +5,7 @@ import Dude from './Dude'
 class FallState extends IState {
   private player: Dude
   private isDoubleJump: boolean
+
   private allowDoubleJump: boolean
 
   constructor(player: Dude) {
@@ -28,6 +29,7 @@ class FallState extends IState {
   }
 
   onStateEnter(param?: any): void {
+    this.isDoubleJump = param
     this.player.anims.play('mask-fall-anims')
   }
 
@@ -55,6 +57,10 @@ class FallState extends IState {
       this.player.body.setVelocityX(0)
       this.player.body.setAccelerationX(0)
     }
+
+    // if (this.player.isCollideWall()) {
+    //   this.player.getState().advance(DudeStateName.wjump)
+    // }
 
     if (this.player.body.onFloor()) {
       if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {

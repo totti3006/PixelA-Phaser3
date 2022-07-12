@@ -35,7 +35,7 @@ class DudeState extends IStateMachine {
     jumpstate.addNeighbors(diestate)
     jumpstate.addNeighbors(movestate)
     jumpstate.addNeighbors(fallstate)
-    jumpstate.addNeighbors(walljumpstate)
+    // jumpstate.addNeighbors(walljumpstate)
 
     walljumpstate.addNeighbors(jumpstate)
     walljumpstate.addNeighbors(idlestate)
@@ -53,6 +53,7 @@ class DudeState extends IStateMachine {
     fallstate.addNeighbors(jumpstate)
     fallstate.addNeighbors(movestate)
     fallstate.addNeighbors(diestate)
+    fallstate.addNeighbors(walljumpstate)
 
     this.current = idlestate
     this.exitState = diestate

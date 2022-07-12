@@ -54,6 +54,10 @@ class PlayScene extends Phaser.Scene {
     this.terrainLayer.setName('terrainLayer')
     this.terrainLayer.setCollisionByProperty({ collide: true })
 
+    // this.terrainLayer.forEachTile(tile => {
+    //   console.log(tile.collides)
+    // })
+
     // DebugGraphics(this)
 
     // *************
@@ -174,6 +178,7 @@ class PlayScene extends Phaser.Scene {
             texture: 'mask-idle'
           },
           this.projectiles,
+          this.terrainLayer,
           this.map.heightInPixels
         )
       }

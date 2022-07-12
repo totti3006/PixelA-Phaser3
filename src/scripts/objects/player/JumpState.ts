@@ -4,11 +4,15 @@ import Dude from './Dude'
 
 class JumpState extends IState {
   private player: Dude
+  private dJump: boolean
+  private allowDoubleJump: boolean
 
   constructor(player: Dude) {
     super()
 
     this.player = player
+    this.dJump = false
+    this.allowDoubleJump = false
   }
 
   getName(): string {
@@ -29,6 +33,22 @@ class JumpState extends IState {
   }
 
   onStateExecution(param?: any): void {
+    if (this.player.getKeys()?.get('JUMP')?.isUp) {
+      this.allowDoubleJump = true
+    }
+
+    if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
+      if (!this.dJump) {
+        this.dJump = true
+        this.player.body.setVelocityY(-350)
+        this.player.anims.play('mask-djump-anims')
+      }
+    }
+
+    // if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
+    //   this.dJump = true
+    // }
+
     if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
       this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(8, 2)
 
@@ -61,12 +81,15 @@ class JumpState extends IState {
       // ) {
       //   this.player.getState().advance(DudeStateName.wjump)
       // } else {
-      this.player.getState().advance(DudeStateName.fall)
+      this.player.getState().advance(DudeStateName.fall, this.dJump)
       // }
     }
   }
 
-  onStateExit(param?: any): void {}
+  onStateExit(param?: any): void {
+    this.allowDoubleJump = false
+    this.dJump = false
+  }
 }
 
 export default JumpState

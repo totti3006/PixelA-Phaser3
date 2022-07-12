@@ -22,6 +22,10 @@ class VirtualBody extends Phaser.GameObjects.Rectangle {
     this.body.checkCollision.down = false
     this.body.checkCollision.up = false
   }
+
+  update(): void {
+    console.log(this.body.touching.none)
+  }
 }
 
 export default VirtualBody

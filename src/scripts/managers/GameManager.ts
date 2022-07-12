@@ -46,9 +46,18 @@ class GameManager {
     // *****************************************************************
     // COLLIDERS
     // *****************************************************************
+    // let collideTiles: Phaser.GameObjects.Group
+    let collideTiles: Phaser.Tilemaps.Tile
+    this.terrainLayer.forEachTile(tile => {
+      // collideTiles.add(tile)
+      collideTiles = tile
+    })
+
     this.currentScene.physics.add.collider(this.player, this.terrainLayer)
-    // this.currentScene.physics.add.overlap(this.player.getVirtualBody(), this.terrainLayer, () => {
-    //   console.log('overlap')
+
+    // this.currentScene.physics.add.collider(this.player.getVirtualBody(), this.terrainLayer, () => {
+    //   // console.log('overlap')
+    //   this.player.setCollideWall(true)
     // })
     this.currentScene.physics.add.collider(this.player, this.bars)
     this.currentScene.physics.add.overlap(
