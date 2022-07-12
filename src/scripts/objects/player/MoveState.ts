@@ -4,11 +4,13 @@ import Dude from './Dude'
 
 class MoveState extends IState {
   private player: Dude
+  private allowJump: boolean
 
   constructor(player: Dude) {
     super()
 
     this.player = player
+    this.allowJump = true
   }
 
   getName(): string {
@@ -25,10 +27,10 @@ class MoveState extends IState {
 
   onStateEnter(param?: any): void {
     if (param === 'left') {
-      this.player.body.setAccelerationX(-this.player.getAcceleration()).setOffset(4, 2)
+      this.player.body.setAccelerationX(-this.player.getAcceleration()).setOffset(6, 2)
       this.player.setFlipX(true)
     } else if (param === 'right') {
-      this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(6, 2)
+      this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(8, 2)
       this.player.setFlipX(false)
     }
 
@@ -36,12 +38,53 @@ class MoveState extends IState {
   }
 
   onStateExecution(param?: any): void {
+    if (this.player.getKeys().get('JUMP')?.isDown && this.allowJump) {
+      /*
+       * Moving to Jump State
+       */
+      this.player.getState().advance(DudeStateName.jump)
+      this.allowJump = false
+    } else if (this.player.getKeys().get('JUMP')?.isUp) {
+      this.allowJump = true
+    }
+
+    /*
+     * Moving to Fall State
+     */
     if (this.player.body.velocity.y > 0) {
       this.player.getState().advance(DudeStateName.fall)
+    } else if (
+      /*
+       * Moving to Idle State
+       */
+      (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isDown) ||
+      (this.player.getKeys().get('RIGHT')?.isUp && this.player.getKeys().get('LEFT')?.isUp)
+    ) {
+      this.player.getState().advance(DudeStateName.idle)
+    } else if (
+      this.player.getKeys().get('RIGHT')?.isDown &&
+      this.player.getKeys().get('LEFT')?.isUp &&
+      this.player.flipX
+    ) {
+      /*
+       * Moving to Move State right
+       */
+      this.player.getState().advance(DudeStateName.move, 'right')
+    } else if (
+      this.player.getKeys().get('RIGHT')?.isUp &&
+      this.player.getKeys().get('LEFT')?.isDown &&
+      !this.player.flipX
+    ) {
+      /*
+       * Moving to Move State left
+       */
+      this.player.getState().advance(DudeStateName.move, 'left')
     }
   }
 
-  onStateExit(param?: any): void {}
+  onStateExit(param?: any): void {
+    this.allowJump = true
+  }
 }
 
 export default MoveState

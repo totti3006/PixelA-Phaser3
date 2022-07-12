@@ -4,11 +4,13 @@ import Dude from './Dude'
 
 class IdleState extends IState {
   private player: Dude
+  private allowJump: boolean
 
   constructor(player: Dude) {
     super()
 
     this.player = player
+    this.allowJump = true
   }
 
   getName(): string {
@@ -30,12 +32,34 @@ class IdleState extends IState {
   }
 
   onStateExecution(param?: any): void {
+    if (this.player.getKeys().get('JUMP')?.isDown && this.allowJump) {
+      /*
+       * Moving to Jump State
+       */
+      this.player.getState().advance(DudeStateName.jump)
+      this.allowJump = false
+    } else if (this.player.getKeys().get('JUMP')?.isUp) {
+      this.allowJump = true
+    }
+
     if (this.player.body.velocity.y > 0) {
+      /*
+       *  Moving to Fall State
+       */
       this.player.getState().advance(DudeStateName.fall)
+    } else if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+      /*
+       *  Moving to Move State
+       */
+      this.player.getState().advance(DudeStateName.move, 'right')
+    } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+      this.player.getState().advance(DudeStateName.move, 'left')
     }
   }
 
-  onStateExit(param?: any): void {}
+  onStateExit(param?: any): void {
+    this.allowJump = true
+  }
 }
 
 export default IdleState

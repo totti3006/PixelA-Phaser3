@@ -12,6 +12,11 @@
         "url": "./assets/maps/room2.json"
       },
       {
+        "type": "tilemapTiledJSON",
+        "key": "room3",
+        "url": "./assets/maps/room3.json"
+      },
+      {
         "type": "json",
         "key": "animationJSON",
         "url": "./assets/animation/animation.json"
@@ -30,6 +35,11 @@
         "type": "image",
         "key": "background-blue",
         "url": "./assets/tiles/Blue.png"
+      },
+      {
+        "type": "image",
+        "key": "background-yellow",
+        "url": "./assets/tiles/Yellow.png"
       },
       {
         "type": "image",
@@ -53,8 +63,38 @@
       },
       {
         "type": "image",
+        "key": "button-play",
+        "url": "./assets/images/buttons/Play.png"
+      },
+      {
+        "type": "image",
         "key": "title",
-        "url": "./assets/images/title.png"
+        "url": "./assets/images/Title.png"
+      },
+      {
+        "type": "image",
+        "key": "hud",
+        "url": "./assets/images/Hud1.png"
+      },
+      {
+        "type": "image",
+        "key": "bar-right-32",
+        "url": "./assets/images/BarRight(32x16).png"
+      },
+      {
+        "type": "image",
+        "key": "bar-right-48",
+        "url": "./assets/images/BarRight(48x16).png"
+      },
+      {
+        "type": "image",
+        "key": "bar-left-16",
+        "url": "./assets/images/BarLeft(16x16).png"
+      },
+      {
+        "type": "image",
+        "key": "plant-bullet",
+        "url": "./assets/sprites/plant/Bullet.png"
       },
       {
         "type": "spritesheet",
@@ -184,6 +224,15 @@
       },
       {
         "type": "spritesheet",
+        "key": "mask-walljump",
+        "url": "./assets/sprites/maskDude/WallJump(32x32).png",
+        "frameConfig": {
+          "frameWidth": 32,
+          "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
         "key": "font-white",
         "url": "./assets/font/Text(White)(8x10).png",
         "frameConfig": {
@@ -234,6 +283,96 @@
         "frameConfig": {
           "frameWidth": 32,
           "frameHeight": 32
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "rino-idle",
+        "url": "./assets/sprites/rino/Idle(52x34).png",
+        "frameConfig": {
+          "frameWidth": 52,
+          "frameHeight": 34
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "rino-run",
+        "url": "./assets/sprites/rino/Run(52x34).png",
+        "frameConfig": {
+          "frameWidth": 52,
+          "frameHeight": 34
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "rino-hit",
+        "url": "./assets/sprites/rino/Hit(52x34).png",
+        "frameConfig": {
+          "frameWidth": 52,
+          "frameHeight": 34
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "rino-hitwall",
+        "url": "./assets/sprites/rino/HitWall(52x34).png",
+        "frameConfig": {
+          "frameWidth": 52,
+          "frameHeight": 34
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "plant-idle",
+        "url": "./assets/sprites/plant/Idle(44x42).png",
+        "frameConfig": {
+          "frameWidth": 44,
+          "frameHeight": 42
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "plant-hit",
+        "url": "./assets/sprites/plant/Hit(44x42).png",
+        "frameConfig": {
+          "frameWidth": 44,
+          "frameHeight": 42
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "plant-attack",
+        "url": "./assets/sprites/plant/Attack(44x42).png",
+        "frameConfig": {
+          "frameWidth": 44,
+          "frameHeight": 42
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "checkpoint-noflag",
+        "url": "./assets/sprites/checkpoint/Checkpoint(NoFlag).png",
+        "frameConfig": {
+          "frameWidth": 64,
+          "frameHeight": 64
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "checkpoint-flagout",
+        "url": "./assets/sprites/checkpoint/Checkpoint(FlagOut)(64x64).png",
+        "frameConfig": {
+          "frameWidth": 64,
+          "frameHeight": 64
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "checkpoint-flagidle",
+        "url": "./assets/sprites/checkpoint/Checkpoint(FlagIdle)(64x64).png",
+        "frameConfig": {
+          "frameWidth": 64,
+          "frameHeight": 64
         }
       }
     ]

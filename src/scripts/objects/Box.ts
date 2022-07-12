@@ -4,7 +4,6 @@ import Fruit from './Fruit'
 class Box extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
 
-  private currentScene: Phaser.Scene
   private boxContent: string
   private content: Fruit | null
   private hitBoxTimeline: Phaser.Tweens.Timeline
@@ -20,20 +19,20 @@ class Box extends Phaser.GameObjects.Sprite {
   constructor(aParams: IBoxConstructor) {
     super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)
 
-    this.currentScene = aParams.scene
+    this.scene = aParams.scene
     this.boxContent = aParams.content
 
     this.initSprite()
-    this.currentScene.add.existing(this)
+    this.scene.add.existing(this)
   }
 
   private initSprite(): void {
     this.content = null
-    this.hitBoxTimeline = this.currentScene.tweens.createTimeline({})
+    this.hitBoxTimeline = this.scene.tweens.createTimeline({})
 
     this.setOrigin(0, 0).setFrame(0)
 
-    this.currentScene.physics.world.enable(this)
+    this.scene.physics.world.enable(this)
     this.body
       .setAllowGravity(false)
       .setImmovable(true)
@@ -51,11 +50,11 @@ class Box extends Phaser.GameObjects.Sprite {
 
   public spawnBoxContent(): Fruit {
     this.content = new Fruit({
-      scene: this.currentScene,
+      scene: this.scene,
       x: this.x,
       y: this.y,
       texture: this.boxContent,
-      points: 1000
+      points: 100
     })
     return this.content
   }
@@ -78,10 +77,10 @@ class Box extends Phaser.GameObjects.Sprite {
 
     this.content?.body.setAllowGravity(true).setSize(1, 1)
 
-    this.currentScene.physics.add.collider(this.content!, terrainLayer)
+    this.scene.physics.add.collider(this.content!, terrainLayer)
 
     this.content?.setAlpha(0.5)
-    this.currentScene.tweens.add({
+    this.scene.tweens.add({
       targets: this.content,
       props: {
         alpha: 1
@@ -97,7 +96,7 @@ class Box extends Phaser.GameObjects.Sprite {
 
   public addScore(score: number): void {
     // this.currentScene.registry.values.score += score
-    this.currentScene.events.emit('scoreChanged')
+    this.scene.events.emit('scoreChanged')
   }
 }
 

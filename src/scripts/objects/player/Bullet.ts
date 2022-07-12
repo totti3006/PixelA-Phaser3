@@ -3,14 +3,13 @@ import Dude from './Dude'
 class Bullet extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
 
-  private currentScene: Phaser.Scene
   private player: Dude
   private speed: number
 
   constructor(scene: Phaser.Scene, projectile: Phaser.GameObjects.Group, player: Dude) {
     super(scene, player.x, player.y, 'darts')
 
-    this.currentScene = scene
+    this.scene = scene
     this.player = player
     this.speed = 300
 
@@ -21,9 +20,9 @@ class Bullet extends Phaser.GameObjects.Sprite {
   }
 
   private initSprite(): void {
-    this.setOrigin(0, 0).setScale(0.5, 0.5).setAlpha(0)
+    this.setOrigin(0, 0).setScale(1).setAlpha(0)
 
-    this.currentScene.tweens.add({
+    this.scene.tweens.add({
       targets: this,
       props: {
         alpha: 1
@@ -32,7 +31,7 @@ class Bullet extends Phaser.GameObjects.Sprite {
       repeat: false
     })
 
-    this.currentScene.physics.world.enableBody(this)
+    this.scene.physics.world.enableBody(this)
     this.body.setAllowGravity(false).setCircle(this.width / 2)
 
     if (this.player.flipX) {
@@ -48,7 +47,9 @@ class Bullet extends Phaser.GameObjects.Sprite {
 
   public hitObstacle(): void {
     this.anims.stop()
-    this.currentScene.tweens.add({
+    this.body.checkCollision.none = true
+    this.body.setAllowGravity(true)
+    this.scene.tweens.add({
       targets: this,
       props: {
         alpha: 0
@@ -60,6 +61,11 @@ class Bullet extends Phaser.GameObjects.Sprite {
       }
     })
   }
+
+  // public bounceFromMob(v: number): void {
+  //   this.body.setBounce(1, 1)
+  //   this.hitObstacle()
+  // }
 }
 
 export default Bullet

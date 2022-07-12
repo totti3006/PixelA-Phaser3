@@ -37,7 +37,7 @@ class Mushroom extends Mob {
           this.anims.play('mushroom-run-anims', true)
         }
       } else {
-        if (Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), this.currentScene.cameras.main.worldView)) {
+        if (Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), this.scene.cameras.main.worldView)) {
           this.isActivated = true
         }
       }
@@ -54,17 +54,35 @@ class Mushroom extends Mob {
     this.isDying = true
 
     this.anims.play('mushroom-hit-anims')
-    this.showAndAddScore()
+    this.showAndAddScore(0)
+
+    this.scene.add.tween({
+      targets: this,
+      props: { alpha: 0 },
+      duration: 1000,
+      ease: 'Power0',
+      yoyo: false,
+      onComplete: this.isDead
+    })
   }
 
   public gotHitFromBullet(v: number): void {
     this.isDying = true
     this.anims.play('mushroom-hit-anims')
-    this.showAndAddScore()
+    this.showAndAddScore(500)
     this.body.setVelocityX(v)
+
+    this.scene.add.tween({
+      targets: this,
+      props: { alpha: 0 },
+      duration: 1000,
+      ease: 'Power0',
+      yoyo: false,
+      onComplete: this.isDead
+    })
   }
 
-  public isDead(): void {
+  public isDead = (): void => {
     this.destroy()
   }
 }

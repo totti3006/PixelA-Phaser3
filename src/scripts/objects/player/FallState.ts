@@ -5,12 +5,14 @@ import Dude from './Dude'
 class FallState extends IState {
   private player: Dude
   private isDoubleJump: boolean
+  private allowDoubleJump: boolean
 
   constructor(player: Dude) {
     super()
 
     this.player = player
     this.isDoubleJump = false
+    this.allowDoubleJump = false
   }
 
   getName(): string {
@@ -30,15 +32,11 @@ class FallState extends IState {
   }
 
   onStateExecution(param?: any): void {
-    if (this.player.getKeys().get('RIGHT')?.isDown) {
-      this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(6, 2)
-      this.player.setFlipX(false)
-    } else if (this.player.getKeys().get('LEFT')?.isDown) {
-      this.player.body.setAccelerationX(-this.player.getAcceleration()).setOffset(4, 2)
-      this.player.setFlipX(true)
+    if (this.player.getKeys()?.get('JUMP')?.isUp) {
+      this.allowDoubleJump = true
     }
 
-    if (this.player.getKeys()?.get('JUMP')?.isDown) {
+    if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
       if (!this.isDoubleJump) {
         this.isDoubleJump = true
         this.player.body.setVelocityY(-350)
@@ -46,10 +44,41 @@ class FallState extends IState {
         this.player.anims.playAfterRepeat('mask-fall-anims')
       }
     }
+
+    if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+      this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(8, 2)
+      this.player.setFlipX(false)
+    } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+      this.player.body.setAccelerationX(-this.player.getAcceleration()).setOffset(6, 2)
+      this.player.setFlipX(true)
+    } else if (this.player.getKeys().get('RIGHT')?.isUp && this.player.getKeys().get('LEFT')?.isUp) {
+      this.player.body.setVelocityX(0)
+      this.player.body.setAccelerationX(0)
+    }
+
+    if (this.player.body.onFloor()) {
+      if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+        /*
+         * Moving to Move State right
+         */
+        this.player.getState().advance(DudeStateName.move, 'right')
+      } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+        /*
+         * Moving to Move State left
+         */
+        this.player.getState().advance(DudeStateName.move, 'left')
+      } else {
+        /*
+         * Moving to Idle State
+         */
+        this.player.getState().advance(DudeStateName.idle)
+      }
+    }
   }
 
   onStateExit(param?: any): void {
     this.isDoubleJump = false
+    this.allowDoubleJump = false
   }
 }
 

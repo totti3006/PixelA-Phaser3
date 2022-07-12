@@ -2,7 +2,10 @@ import DebugGraphics from '../helpers/DebugGraphics'
 import GameManager from '../managers/GameManager'
 import Box from '../objects/Box'
 import Mushroom from '../objects/enemies/Mushroom'
+import Plant from '../objects/enemies/Plant'
+import Rino from '../objects/enemies/Rino'
 import Fruit from '../objects/Fruit'
+import Landmark from '../objects/Landmark'
 import Bullet from '../objects/player/Bullet'
 import Dude from '../objects/player/Dude'
 import Spikes from '../objects/traps/Spikes'
@@ -24,6 +27,9 @@ class PlayScene extends Phaser.Scene {
   private traps: Phaser.GameObjects.Group
   private projectiles: Phaser.GameObjects.Group
   private mobs: Phaser.GameObjects.Group
+  private bars: Phaser.GameObjects.Group
+  private landmark: Phaser.GameObjects.Group
+  private mobProjectiles: Phaser.GameObjects.Group
 
   // manager
   private gameManager: GameManager
@@ -66,7 +72,10 @@ class PlayScene extends Phaser.Scene {
       fruits: this.fruits,
       traps: this.traps,
       projectiles: this.projectiles,
-      mobs: this.mobs
+      mobs: this.mobs,
+      bars: this.bars,
+      landmark: this.landmark,
+      mobProjectiles: this.mobProjectiles
     })
 
     // *****************************************************************
@@ -74,6 +83,8 @@ class PlayScene extends Phaser.Scene {
     // *****************************************************************
     this.cameras.main.startFollow(this.player)
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
+
+    this.cameras.main.fadeIn(500, 0, 0, 0)
   }
 
   private initObjectsGroup(): void {
@@ -94,6 +105,18 @@ class PlayScene extends Phaser.Scene {
     })
 
     this.mobs = this.add.group({
+      runChildUpdate: true
+    })
+
+    this.bars = this.add.group({
+      runChildUpdate: true
+    })
+
+    this.mobProjectiles = this.add.group({
+      runChildUpdate: true
+    })
+
+    this.landmark = this.add.group({
       runChildUpdate: true
     })
   }
@@ -150,7 +173,8 @@ class PlayScene extends Phaser.Scene {
             y: object.y,
             texture: 'mask-idle'
           },
-          this.projectiles
+          this.projectiles,
+          this.map.heightInPixels
         )
       }
 
@@ -164,7 +188,56 @@ class PlayScene extends Phaser.Scene {
               texture: 'mushroom-idle'
             })
           )
+        } else if (object.properties[0].value === 'rino') {
+          this.mobs.add(
+            new Rino(
+              {
+                scene: this,
+                x: object.x,
+                y: object.y,
+                texture: 'rino-idle'
+              },
+              this.landmark,
+              this.player
+            )
+          )
+        } else if (object.properties[1].value === 'plant') {
+          this.mobs.add(
+            new Plant(
+              {
+                scene: this,
+                x: object.x,
+                y: object.y,
+                texture: 'plant-idle'
+              },
+              object.properties[0].value,
+              this.mobProjectiles
+            )
+          )
         }
+      }
+
+      if (object.name === 'bar') {
+        let bar = this.physics.add.image(object.x, object.y, `bar-${object.properties[0].value}-${object.width}`)
+        bar.setOrigin(0, 0)
+        bar.body.setAllowGravity(false)
+        bar.body.setImmovable(true)
+        bar.body.checkCollision.down = false
+        bar.body.checkCollision.right = false
+        bar.body.checkCollision.left = false
+
+        this.bars.add(bar)
+      }
+
+      if (object.name === 'checkpoint') {
+        this.landmark.add(
+          new Landmark({
+            scene: this,
+            x: object.x,
+            y: object.y,
+            texture: 'checkpoint-noflag'
+          })
+        )
       }
     })
   }

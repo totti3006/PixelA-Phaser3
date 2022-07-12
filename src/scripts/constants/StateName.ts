@@ -1,7 +1,7 @@
 const DudeStateName = {
   idle: 'idleState',
   jump: 'jumpState',
-  djump: 'djumpState',
+  wjump: 'wjumpState',
   fall: 'fallState',
   move: 'moveState',
   die: 'dieState'

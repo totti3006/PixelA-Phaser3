@@ -155,6 +155,17 @@
       "frameRate": 18
     },
     {
+      "key": "mask-walljump-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "mask-walljump",
+        "start": 0,
+        "end": 4
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
       "key": "dart-anims",
       "frames": {
         "typeOfGeneration": "generateFrameNumbers",
@@ -196,6 +207,105 @@
         "end": 15
       },
       "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "checkpoint-flagout-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "checkpoint-flagout",
+        "start": 0,
+        "end": 25
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "checkpoint-flagidle-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "checkpoint-flagidle",
+        "start": 0,
+        "end": 9
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "rino-idle-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "rino-idle",
+        "start": 0,
+        "end": 10
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "rino-run-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "rino-run",
+        "start": 0,
+        "end": 5
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "rino-hit-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "rino-hit",
+        "start": 0,
+        "end": 4
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "rino-hitwall-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "rino-hitwall",
+        "start": 0,
+        "end": 3
+      },
+      "repeat": 0,
+      "frameRate": 18
+    },
+    {
+      "key": "plant-idle-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "plant-idle",
+        "start": 0,
+        "end": 10
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "plant-hit-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "plant-hit",
+        "start": 0,
+        "end": 4
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "plant-attack-anims",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "plant-attack",
+        "start": 0,
+        "end": 7
+      },
+      "repeat": 0,
       "frameRate": 18
     }
   ]

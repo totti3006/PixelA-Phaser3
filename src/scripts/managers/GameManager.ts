@@ -1,6 +1,9 @@
 import Box from '../objects/Box'
 import Mob from '../objects/enemies/Mob'
+import PlantBullet from '../objects/enemies/PlantBullet'
+import Rino from '../objects/enemies/Rino'
 import Fruit from '../objects/Fruit'
+import Landmark from '../objects/Landmark'
 import Bullet from '../objects/player/Bullet'
 import Dude from '../objects/player/Dude'
 import Spikes from '../objects/traps/Spikes'
@@ -18,6 +21,9 @@ class GameManager {
   private traps: Phaser.GameObjects.Group
   private projectiles: Phaser.GameObjects.Group
   private mobs: Phaser.GameObjects.Group
+  private bars: Phaser.GameObjects.Group
+  private landmark: Phaser.GameObjects.Group
+  private mobProjectiles: Phaser.GameObjects.Group
 
   constructor(scene: Phaser.Scene, obj: any) {
     this.currentScene = scene
@@ -30,11 +36,29 @@ class GameManager {
     this.traps = obj.traps
     this.projectiles = obj.projectiles
     this.mobs = obj.mobs
+    this.bars = obj.bars
+    this.landmark = obj.landmark
+    this.mobProjectiles = obj.mobProjectiles
+
+    // console.log(this.player.getVirtualBody())
+    // console.log(this.player)
 
     // *****************************************************************
     // COLLIDERS
     // *****************************************************************
     this.currentScene.physics.add.collider(this.player, this.terrainLayer)
+    // this.currentScene.physics.add.overlap(this.player.getVirtualBody(), this.terrainLayer, () => {
+    //   console.log('overlap')
+    // })
+    this.currentScene.physics.add.collider(this.player, this.bars)
+    this.currentScene.physics.add.overlap(
+      this.player,
+      this.landmark,
+      this.handleLandmarkOverlap,
+      undefined,
+      this.currentScene
+    )
+    this.currentScene.physics.add.collider(this.landmark, this.terrainLayer)
     this.currentScene.physics.add.collider(
       this.player,
       this.boxes,
@@ -85,14 +109,45 @@ class GameManager {
       undefined,
       this.currentScene
     )
+    this.currentScene.physics.add.overlap(
+      this.player,
+      this.mobProjectiles,
+      this.handlePlayerHitProjectile,
+      undefined,
+      this.currentScene
+    )
+    this.currentScene.physics.add.collider(
+      this.mobProjectiles,
+      this.terrainLayer,
+      this.handleProjectileCollide,
+      undefined,
+      this.currentScene
+    )
+  }
+
+  private handlePlayerHitProjectile = (player: GameObj, projectile: GameObj): void => {
+    let _player = player as Dude
+    let _projectile = projectile as PlantBullet
+
+    _player.gotHit(_projectile.getSpeed())
+    _projectile.hitObstacle()
+  }
+
+  private handleLandmarkOverlap = (player: GameObj, landmark: GameObj): void => {
+    let _player = player as Dude
+    let _landmark = landmark as Landmark
+
+    _landmark.checkIn()
   }
 
   private handleProjectileCollideMobs = (projectile: GameObj, mob: GameObj): void => {
     let _projectile = projectile as Bullet
     let _mob = mob as Mob
 
-    _mob.gotHitFromBullet(_projectile.body.velocity.x)
-    // _projectile.hitObstacle()
+    if (_mob.getVulnerable()) {
+      _mob.gotHitFromBullet(_projectile.body.velocity.x)
+    }
+    _projectile.hitObstacle()
   }
 
   private handlePlayerMobsOverlap = (player: GameObj, mob: GameObj): void => {
@@ -102,19 +157,11 @@ class GameManager {
     if (_player.body.touching.down && _mob.body.touching.up) {
       // player hit enemy on top
       _player.bounceUpAfterHitTargetOnHead()
-      _mob.gotHitOnHead()
-      this.currentScene.add.tween({
-        targets: _mob,
-        props: { alpha: 0 },
-        duration: 1000,
-        ease: 'Power0',
-        yoyo: false,
-        onComplete: function () {
-          _mob.isDead()
-        }
-      })
+      if (_mob.getVulnerable()) {
+        _mob.gotHitOnHead()
+      }
     } else {
-      _player.gotHit()
+      _player.gotHit(_mob.getSpeed())
     }
   }
 
@@ -122,7 +169,7 @@ class GameManager {
     let _player = player as Dude
     let _trap = trap as Spikes
 
-    _player.gotHit()
+    _player.gotHit(0)
   }
 
   private handlePlayerHitBox = (player: GameObj, box: GameObj): void => {
@@ -146,7 +193,7 @@ class GameManager {
   }
 
   private handleProjectileCollide = (projectile: GameObj, terrain): void => {
-    let _projectile = projectile as Bullet
+    let _projectile = projectile as Bullet | PlantBullet
 
     _projectile.hitObstacle()
   }

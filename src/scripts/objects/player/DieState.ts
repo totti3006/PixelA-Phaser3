@@ -24,7 +24,7 @@ class DieState extends IState {
   }
 
   onStateEnter(param?: any): void {
-    let v: number = -this.player.body.velocity.x
+    let v: number = -(this.player.body.velocity.x - param)
 
     this.player.body.stop()
     this.player.anims.play('mask-hit-anims')

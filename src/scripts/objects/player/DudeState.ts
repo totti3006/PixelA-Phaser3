@@ -7,6 +7,7 @@ import JumpState from './JumpState'
 import FallState from './FallState'
 import MoveState from './MoveState'
 import DieState from './DieState'
+import WallJump from './WallJump'
 
 class DudeState extends IStateMachine {
   private stateList: IState[]
@@ -18,11 +19,12 @@ class DudeState extends IStateMachine {
 
     let idlestate = new IdleState(player)
     let jumpstate = new JumpState(player)
+    let walljumpstate = new WallJump(player)
     let fallstate = new FallState(player)
     let movestate = new MoveState(player)
     let diestate = new DieState(player)
 
-    this.stateList = [idlestate, jumpstate, movestate, diestate]
+    this.stateList = [idlestate, jumpstate, walljumpstate, movestate, diestate]
 
     idlestate.addNeighbors(jumpstate)
     idlestate.addNeighbors(movestate)
@@ -33,6 +35,13 @@ class DudeState extends IStateMachine {
     jumpstate.addNeighbors(diestate)
     jumpstate.addNeighbors(movestate)
     jumpstate.addNeighbors(fallstate)
+    jumpstate.addNeighbors(walljumpstate)
+
+    walljumpstate.addNeighbors(jumpstate)
+    walljumpstate.addNeighbors(idlestate)
+    walljumpstate.addNeighbors(movestate)
+    walljumpstate.addNeighbors(fallstate)
+    walljumpstate.addNeighbors(diestate)
 
     movestate.addNeighbors(jumpstate)
     movestate.addNeighbors(diestate)
