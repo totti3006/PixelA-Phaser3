@@ -46,6 +46,7 @@ class IdleState extends IState {
        * Moving to Jump State
        */
       this.player.getState().advance(DudeStateName.jump)
+      this.allowJump = false
     }
 
     if (this.player.body.velocity.y > 0) {

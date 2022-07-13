@@ -35,7 +35,7 @@ class DudeState extends IStateMachine {
     jumpstate.addNeighbors(diestate)
     jumpstate.addNeighbors(movestate)
     jumpstate.addNeighbors(fallstate)
-    // jumpstate.addNeighbors(walljumpstate)
+    jumpstate.addNeighbors(walljumpstate)
 
     walljumpstate.addNeighbors(jumpstate)
     walljumpstate.addNeighbors(idlestate)
@@ -92,6 +92,7 @@ class DudeState extends IStateMachine {
    * @returns boolean
    */
   public advance(nextState: string, param?: any): boolean {
+    console.log(nextState)
     this.current.getNeighbors().forEach(state => {
       if (state.getName() == nextState) {
         this.current.onStateExit(param)

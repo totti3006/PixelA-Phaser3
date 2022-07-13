@@ -80,6 +80,11 @@ class FallState extends IState {
         this.player.getState().advance(DudeStateName.idle)
       }
     }
+
+    if ((this.player.overlapLeft && this.player.flipX) || (this.player.overlapRight && !this.player.flipX) 
+    ) {
+      this.player.getState().advance(DudeStateName.wjump)
+    }
   }
 
   onStateExit(param?: any): void {

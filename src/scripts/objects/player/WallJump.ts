@@ -42,7 +42,7 @@ class WallJump extends IState {
   }
 
   onStateExecution(param?: any): void {
-    this.player.body.setVelocityY(40)
+    this.player.body.setVelocityY(30)
 
     if (this.player.getKeys()?.get('JUMP')?.isUp) {
       this.allowJump = true
@@ -52,21 +52,21 @@ class WallJump extends IState {
       this.player.getState().advance(DudeStateName.jump)
       if (this.player.flipX) {
         this.player.setFlipX(false)
-        this.player.body.setVelocityX(600)
+        this.player.body.setVelocityX(300)
       } else {
         this.player.setFlipX(true)
-        this.player.body.setVelocityX(-600)
+        this.player.body.setVelocityX(-300)
       }
       this.player.setCollideWall(false)
+      return
     }
-
-    // if (this.player.getKeys()?.get('RIGHT')?.isDown)
     if (
-      !this.player.isCollideWall() ||
-      (this.player.getKeys()?.get('RIGHT')?.isDown && this.player.getKeys()?.get('LEFT')?.isDown)
+      !(this.player.overlapLeft || this.player.overlapRight) ||
+      (this.player.getKeys()?.get('RIGHT')?.isDown && this.player.flipX) ||
+      (this.player.getKeys()?.get('LEFT')?.isDown && !this.player.flipX)
     ) {
       this.player.getState().advance(DudeStateName.fall)
-    }
+    } 
 
     if (this.player.body.onFloor()) {
       if (this.player.flipX) {
