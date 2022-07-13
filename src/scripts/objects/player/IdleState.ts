@@ -11,7 +11,7 @@ class IdleState extends IState {
     super()
 
     this.player = player
-    this.allowJump = true
+    this.allowJump = false
   }
 
   getName(): string {
@@ -72,7 +72,7 @@ class IdleState extends IState {
   }
 
   onStateExit(param?: any): void {
-    this.allowJump = true
+    this.allowJump = false
   }
 }
 

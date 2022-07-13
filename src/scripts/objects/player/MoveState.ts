@@ -10,7 +10,7 @@ class MoveState extends IState {
     super()
 
     this.player = player
-    this.allowJump = true
+    this.allowJump = false
   }
 
   getName(): string {
@@ -47,7 +47,7 @@ class MoveState extends IState {
        * Moving to Jump State
        */
       this.player.getState().advance(DudeStateName.jump)
-      this.allowJump = false
+      // this.allowJump = false
     }
 
     /*
@@ -85,7 +85,7 @@ class MoveState extends IState {
   }
 
   onStateExit(param?: any): void {
-    this.allowJump = true
+    this.allowJump = false
   }
 }
 

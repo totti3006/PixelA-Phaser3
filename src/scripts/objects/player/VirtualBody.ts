@@ -17,14 +17,14 @@ class VirtualBody extends Phaser.GameObjects.Rectangle {
     if (player.flipX) {
     } else {
     }
-    this.body.setOffset(2, this.body.offset.y)
+    this.body.setOffset(0, this.body.offset.y)
 
     this.body.checkCollision.down = false
     this.body.checkCollision.up = false
   }
 
   update(): void {
-    console.log(this.body.touching.none)
+    console.log('hi')
   }
 }
 
