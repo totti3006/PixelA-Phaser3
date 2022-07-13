@@ -16,7 +16,7 @@ class Mushroom extends Mob {
     this.score = 500
 
     this.currentState = this.states.idle
-    this.body.setSize(this.width * 0.8, this.height * 0.6).setOffset(4, 12)
+    this.body.setSize(this.width * 0.6, this.height * 0.4).setOffset(6, 18)
     this.anims.play('mushroom-idle-anims')
   }
 

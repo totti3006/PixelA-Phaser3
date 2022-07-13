@@ -20,6 +20,9 @@ class Dude extends Phaser.GameObjects.Sprite {
   private rect: GameObj
 
   private onCollideWall: boolean
+  public virtualPlayer: Phaser.Physics.Arcade.Image
+  public overlapLeft: boolean
+  public overlapRight: boolean
 
   public getKeys(): Map<string, Phaser.Input.Keyboard.Key> {
     return this.keys
@@ -63,6 +66,18 @@ class Dude extends Phaser.GameObjects.Sprite {
     this.terrainLayer = terrainLayer
 
     this.dudeState = new DudeState(this)
+
+    this.create2ndBody()
+  }
+
+  private create2ndBody(): void {
+    
+    // @ts-ignore
+    const virtualPlayer = this.scene.physics.add.image()
+    virtualPlayer.body.setSize(this.width * 0.7, this.height * 0.8)
+    virtualPlayer.body.setAllowGravity(false)
+    virtualPlayer.setDebugBodyColor(0xffff00);
+    this.virtualPlayer = virtualPlayer
   }
 
   private initSprite(): void {
@@ -117,6 +132,13 @@ class Dude extends Phaser.GameObjects.Sprite {
       this.scene.registry.values.score = 0
       this.scene.events.emit('scoreChanged')
     }
+    
+    this.virtualPlayer.setVelocity(0,0)
+    this.virtualPlayer.body.position.set(this.body.x - 1.5, this.body.y + 3)
+    this.virtualPlayer.body.updateCenter()
+
+    this.overlapRight = false
+    this.overlapLeft = false
   }
 
   updateVirtualBody(): void {

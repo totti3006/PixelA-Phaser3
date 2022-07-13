@@ -32,6 +32,7 @@ class JumpState extends IState {
     this.player.anims.play('mask-jump-anims')
   }
 
+  private moveTimer: Phaser.Time.TimerEvent
   onStateExecution(param?: any): void {
     if (this.player.getKeys()?.get('JUMP')?.isUp) {
       this.allowDoubleJump = true
@@ -58,8 +59,12 @@ class JumpState extends IState {
 
       this.player.setFlipX(true)
     } else if (this.player.getKeys().get('RIGHT')?.isUp && this.player.getKeys().get('LEFT')?.isUp) {
-      this.player.body.setVelocityX(0)
-      this.player.body.setAccelerationX(0)
+      if (!this.moveTimer || this.moveTimer.hasDispatched) {
+        this.moveTimer = this.player.scene.time.delayedCall(50, () => {
+          this.player.body.setVelocityX(0)
+          this.player.body.setAccelerationX(0)
+      })
+    }
     }
 
     /*

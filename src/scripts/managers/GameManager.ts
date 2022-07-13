@@ -1,3 +1,4 @@
+import { DudeStateName } from '../constants/StateName'
 import Box from '../objects/Box'
 import Mob from '../objects/enemies/Mob'
 import PlantBullet from '../objects/enemies/PlantBullet'
@@ -54,6 +55,23 @@ class GameManager {
     })
 
     this.currentScene.physics.add.collider(this.player, this.terrainLayer)
+    this.currentScene.physics.add.overlap(this.player.virtualPlayer, this.terrainLayer, (a, b) => {
+      if (b instanceof Phaser.Tilemaps.Tile && a instanceof Phaser.GameObjects.Image) {
+        if (b.index >= 0) {
+          this.player.overlapRight = a.x < b.getCenterX() || this.player.overlapRight
+          this.player.overlapLeft = a.x > b.getCenterX() || this.player.overlapLeft
+          return
+        }
+      }
+      
+    })
+
+    this.currentScene.physics.add.overlap(this.player.virtualPlayer, this.boxes, (a, b) => {
+      if (b instanceof Phaser.GameObjects.Sprite && a instanceof Phaser.GameObjects.Image) {
+        this.player.overlapRight = a.x < b.x || this.player.overlapRight
+        this.player.overlapLeft = a.x > b.x || this.player.overlapLeft
+      }
+    })
 
     // this.currentScene.physics.add.collider(this.player.getVirtualBody(), this.terrainLayer, () => {
     //   // console.log('overlap')
