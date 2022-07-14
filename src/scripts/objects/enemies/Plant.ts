@@ -55,7 +55,18 @@ class Plant extends Mob {
   }
 
   public shoot = (): void => {
-    let bullet = new PlantBullet(this.scene, this.projectile, this)
+    let bulletSpeed: number = 200
+    let bullet = new PlantBullet(this.scene, this.x, this.y)
+
+    this.projectile.add(bullet)
+
+    if (!this.flipX) {
+      bullet.body.velocity.x = -bulletSpeed
+      bullet.setFlipX(false).setX(bullet.x + this.width * 0.5 + bullet.body.offset.x)
+    } else {
+      bullet.body.velocity.x = bulletSpeed
+      bullet.setFlipX(true)
+    }
   }
 
   public gotHitFromBullet(v: number): void {

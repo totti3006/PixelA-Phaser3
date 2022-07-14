@@ -1,6 +1,6 @@
-import { DudeStateName } from '../../constants/StateName'
-import IState from '../../interfaces/state.interface'
-import Dude from './Dude'
+import { DudeStateName } from '../../../constants/StateName'
+import IState from '../../../interfaces/state.interface'
+import Dude from '../Dude'
 
 class MoveState extends IState {
   private player: Dude
@@ -47,7 +47,6 @@ class MoveState extends IState {
        * Moving to Jump State
        */
       this.player.getState().advance(DudeStateName.jump)
-      // this.allowJump = false
     }
 
     /*

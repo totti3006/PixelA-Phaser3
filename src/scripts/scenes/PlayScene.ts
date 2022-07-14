@@ -6,7 +6,7 @@ import Plant from '../objects/enemies/Plant'
 import Rino from '../objects/enemies/Rino'
 import Fruit from '../objects/Fruit'
 import Landmark from '../objects/Landmark'
-import Bullet from '../objects/player/Bullet'
+import ObjectsCreator from '../objects/ObjectsCreator'
 import Dude from '../objects/player/Dude'
 import Spikes from '../objects/traps/Spikes'
 
@@ -21,15 +21,15 @@ class PlayScene extends Phaser.Scene {
   public terrainLayer: Phaser.Tilemaps.TilemapLayer
 
   // game objects
-  private player: Dude
-  private boxes: Phaser.GameObjects.Group
-  private fruits: Phaser.GameObjects.Group
-  private traps: Phaser.GameObjects.Group
-  private projectiles: Phaser.GameObjects.Group
-  private mobs: Phaser.GameObjects.Group
-  private bars: Phaser.GameObjects.Group
-  private landmark: Phaser.GameObjects.Group
-  private mobProjectiles: Phaser.GameObjects.Group
+  public player: Dude
+  public boxes: Phaser.GameObjects.Group
+  public fruits: Phaser.GameObjects.Group
+  public traps: Phaser.GameObjects.Group
+  public projectiles: Phaser.GameObjects.Group
+  public mobs: Phaser.GameObjects.Group
+  public bars: Phaser.GameObjects.Group
+  public landmark: Phaser.GameObjects.Group
+  public mobProjectiles: Phaser.GameObjects.Group
 
   // manager
   private gameManager: GameManager
@@ -54,6 +54,8 @@ class PlayScene extends Phaser.Scene {
     this.terrainLayer.setName('terrainLayer')
     this.terrainLayer.setCollisionByProperty({ collide: true })
 
+    this.registry.set('mapHeight', this.map.heightInPixels)
+
     // DebugGraphics(this)
 
     // *************
@@ -65,18 +67,7 @@ class PlayScene extends Phaser.Scene {
     // *************
     // GAME MANAGER
     // *************
-    this.gameManager = new GameManager(this, {
-      terrainLayer: this.terrainLayer,
-      player: this.player,
-      boxes: this.boxes,
-      fruits: this.fruits,
-      traps: this.traps,
-      projectiles: this.projectiles,
-      mobs: this.mobs,
-      bars: this.bars,
-      landmark: this.landmark,
-      mobProjectiles: this.mobProjectiles
-    })
+    this.gameManager = new GameManager(this)
 
     // *****************************************************************
     // CAMERA
@@ -121,122 +112,43 @@ class PlayScene extends Phaser.Scene {
 
   private loadObjectsFromTilemap(): void {
     const objects = this.map.getObjectLayer('objects').objects as any[]
+    const creator = new ObjectsCreator(this)
 
     objects.forEach(object => {
       if (object.name === 'box') {
-        this.boxes.add(
-          new Box({
-            scene: this,
-            content: object.properties[0].value,
-            x: object.x,
-            y: object.y,
-            texture: 'box1-idle'
-          })
-        )
+        creator.createBox(object.x, object.y, object.properties[0].value)
       }
 
       if (object.name === 'fruit') {
-        this.fruits.add(
-          new Fruit({
-            scene: this,
-            x: object.x,
-            y: object.y,
-            texture: object.properties[0].value,
-            points: 100
-          })
-        )
+        creator.createFruit(object.x, object.y, object.properties[0].value)
       }
 
       if (object.name === 'trap') {
         if (object.properties[1].value === 'spikes') {
-          this.traps.add(
-            new Spikes(
-              {
-                scene: this,
-                x: object.x,
-                y: object.y,
-                texture: object.properties[1].value
-              },
-              object.properties[0].value
-            )
-          )
+          creator.createSpikes(object.x, object.y, object.properties[0].value)
         }
       }
 
       if (object.name === 'player') {
-        this.player = new Dude(
-          {
-            scene: this,
-            x: object.x,
-            y: object.y,
-            texture: 'mask-idle'
-          },
-          this.projectiles,
-          this.terrainLayer,
-          this.map.heightInPixels
-        )
+        this.player = creator.createPlayer(object.x, object.y)
       }
 
       if (object.name === 'mob') {
         if (object.properties[0].value === 'mushroom') {
-          this.mobs.add(
-            new Mushroom({
-              scene: this,
-              x: object.x,
-              y: object.y,
-              texture: 'mushroom-idle'
-            })
-          )
+          creator.createMushroom(object.x, object.y)
         } else if (object.properties[0].value === 'rino') {
-          this.mobs.add(
-            new Rino(
-              {
-                scene: this,
-                x: object.x,
-                y: object.y,
-                texture: 'rino-idle'
-              },
-              this.landmark,
-              this.player
-            )
-          )
+          creator.createRino(object.x, object.y)
         } else if (object.properties[1].value === 'plant') {
-          this.mobs.add(
-            new Plant(
-              {
-                scene: this,
-                x: object.x,
-                y: object.y,
-                texture: 'plant-idle'
-              },
-              object.properties[0].value,
-              this.mobProjectiles
-            )
-          )
+          creator.createPlant(object.x, object.y, object.properties[0].value)
         }
       }
 
       if (object.name === 'bar') {
-        let bar = this.physics.add.image(object.x, object.y, `bar-${object.properties[0].value}-${object.width}`)
-        bar.setOrigin(0, 0)
-        bar.body.setAllowGravity(false)
-        bar.body.setImmovable(true)
-        bar.body.checkCollision.down = false
-        bar.body.checkCollision.right = false
-        bar.body.checkCollision.left = false
-
-        this.bars.add(bar)
+        creator.createBar(object.x, object.y, `bar-${object.properties[0].value}-${object.width}`)
       }
 
       if (object.name === 'checkpoint') {
-        this.landmark.add(
-          new Landmark({
-            scene: this,
-            x: object.x,
-            y: object.y,
-            texture: 'checkpoint-noflag'
-          })
-        )
+        creator.createLandmark(object.x, object.y)
       }
     })
   }

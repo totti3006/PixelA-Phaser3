@@ -1,6 +1,6 @@
-import { DudeStateName } from '../../constants/StateName'
-import IState from '../../interfaces/state.interface'
-import Dude from './Dude'
+import { DudeStateName } from '../../../constants/StateName'
+import IState from '../../../interfaces/state.interface'
+import Dude from '../Dude'
 
 class IdleState extends IState {
   private player: Dude

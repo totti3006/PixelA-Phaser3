@@ -49,68 +49,39 @@ class Rino extends Mob {
 
   update(): void {
     if (!this.isDying) {
-      this.title.setPosition(this.x + 10, this.y + this.height + 15)
-      this.healthBar.destroy()
-      this.remainHealthBar.destroy()
-      this.createHealthBar()
+      this.displayInfo()
 
       if (this.isActivated) {
         if (this.body.blocked.right || this.body.blocked.left) {
-          this.anims.play('rino-hitwall-anims')
-          this.anims.playAfterRepeat('rino-idle-anims')
-
-          this.scene.time.delayedCall(1000, () => {
-            this.anims.play('rino-run-anims')
-            this.speed = -this.speed
-            this.body.velocity.x = this.speed
-
-            if (!this.isVulnerable) {
-              this.isVulnerable = true
-            }
-
-            if (this.speed > 0) this.setFlipX(true)
-            else this.setFlipX(false)
-          })
+          this.handleTurn()
         }
 
         if (this.currentState != this.states.activated) {
-          this.currentState = this.states.activated
-          this.body.setVelocityX(-this.speed)
-          this.anims.play('rino-run-anims')
+          this.handleActivated()
         }
       } else {
         if (
           Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), this.scene.cameras.main.worldView) &&
           this.currentState != this.states.activating
         ) {
-          this.currentState = this.states.activating
-          this.scene.time.delayedCall(500, () => {
-            if (this.x < this.target.x) {
-              this.setFlipX(true)
-              this.speed = -this.speed
-            } else {
-              this.setFlipX(false)
-            }
-            this.isActivated = true
-          })
+          this.handleActivating()
         }
       }
     } else {
       if (this.currentState != this.states.die) {
-        this.title.setPosition(this.x + 10, this.y + this.height + 15)
-        this.healthBar.destroy()
-        this.remainHealthBar.destroy()
-        this.createHealthBar()
-
-        this.currentState = this.states.die
-
-        this.body.checkCollision.none = true
-        this.body.setAllowGravity(false)
+        this.handleDie()
       }
 
       this.body.velocity.x = 0
       this.anims.stop()
     }
+  }
+
+  private displayInfo(): void {
+    this.title.setPosition(this.x + 10, this.y + this.height + 15)
+    this.healthBar.destroy()
+    this.remainHealthBar.destroy()
+    this.createHealthBar()
   }
 
   private createHealthBar(): void {
@@ -134,31 +105,9 @@ class Rino extends Mob {
     this.anims.play('rino-hit-anims')
 
     if (this.health <= 0) {
-      this.isDying = true
-      this.showAndAddScore(0)
-
-      this.scene.add.tween({
-        targets: this,
-        props: { alpha: 0 },
-        duration: 1000,
-        ease: 'Power0',
-        onComplete: () => {
-          this.landmark.add(
-            new Landmark({ scene: this.scene, x: this.x, y: this.y - 20, texture: 'checkpoint-noflag' })
-          )
-          this.isDead()
-        }
-      })
+      this.handleDying()
     } else {
-      if (this.body.velocity.x != 0) {
-        this.body.setVelocityX(0)
-        this.scene.time.delayedCall(500, () => {
-          this.anims.play('rino-run-anims')
-          this.body.setVelocityX(this.speed)
-        })
-      } else {
-        this.anims.playAfterRepeat('rino-idle-anims')
-      }
+      this.handleHitted()
     }
   }
 
@@ -167,33 +116,88 @@ class Rino extends Mob {
     this.anims.play('rino-hit-anims')
 
     if (this.health <= 0) {
-      this.isDying = true
-      this.showAndAddScore(0)
+      this.handleDying()
+    } else {
+      this.handleHitted()
+    }
+  }
 
-      this.scene.add.tween({
-        targets: this,
-        props: { alpha: 0 },
-        duration: 1000,
-        ease: 'Power0',
-        yoyo: false,
-        onComplete: () => {
-          this.landmark.add(
-            new Landmark({ scene: this.scene, x: this.x, y: this.y - 50, texture: 'checkpoint-noflag' })
-          )
-          this.isDead()
-        }
+  private handleDying(): void {
+    this.isDying = true
+    this.showAndAddScore(0)
+
+    this.scene.add.tween({
+      targets: this,
+      props: { alpha: 0 },
+      duration: 1000,
+      ease: 'Power0',
+      onComplete: () => {
+        this.landmark.add(new Landmark({ scene: this.scene, x: this.x, y: this.y - 20, texture: 'checkpoint-noflag' }))
+
+        this.isDead()
+      }
+    })
+  }
+
+  private handleHitted(): void {
+    if (this.body.velocity.x != 0) {
+      this.body.setVelocityX(0)
+      this.scene.time.delayedCall(500, () => {
+        this.anims.play('rino-run-anims')
+        this.body.setVelocityX(this.speed)
       })
     } else {
-      if (this.body.velocity.x != 0) {
-        this.body.setVelocityX(0)
-        this.scene.time.delayedCall(500, () => {
-          this.anims.play('rino-run-anims')
-          this.body.setVelocityX(this.speed)
-        })
-      } else {
-        this.anims.playAfterRepeat('rino-idle-anims')
-      }
+      this.anims.playAfterRepeat('rino-idle-anims')
     }
+  }
+
+  private handleTurn(): void {
+    this.anims.play('rino-hitwall-anims')
+    this.anims.playAfterRepeat('rino-idle-anims')
+
+    this.scene.time.delayedCall(1000, () => {
+      this.anims.play('rino-run-anims')
+      this.speed = -this.speed
+      this.body.velocity.x = this.speed
+
+      if (!this.isVulnerable) {
+        this.isVulnerable = true
+      }
+
+      if (this.speed > 0) this.setFlipX(true)
+      else this.setFlipX(false)
+    })
+  }
+
+  private handleActivating(): void {
+    this.currentState = this.states.activating
+    this.scene.time.delayedCall(500, () => {
+      if (this.x < this.target.x) {
+        this.setFlipX(true)
+        this.speed = -this.speed
+      } else {
+        this.setFlipX(false)
+      }
+      this.isActivated = true
+    })
+  }
+
+  private handleActivated(): void {
+    this.currentState = this.states.activated
+    this.body.setVelocityX(-this.speed)
+    this.anims.play('rino-run-anims')
+  }
+
+  private handleDie(): void {
+    this.title.setPosition(this.x + 10, this.y + this.height + 15)
+    this.healthBar.destroy()
+    this.remainHealthBar.destroy()
+    this.createHealthBar()
+
+    this.currentState = this.states.die
+
+    this.body.checkCollision.none = true
+    this.body.setAllowGravity(false)
   }
 
   public isDead = (): void => {

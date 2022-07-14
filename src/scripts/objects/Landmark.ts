@@ -27,14 +27,14 @@ class Landmark extends Phaser.GameObjects.Sprite {
 
   private moveToNextRoom(): void {
     if (this.scene.registry.get('room') !== setting.finalRoom) {
-      TransitionOut(this.scene)
+      TransitionOut(this.scene.scene.manager.getScene('HUDScene'))
       this.scene.time.delayedCall(750, () => {
         this.scene.registry.set('room', `room${this.scene.registry.get('room').slice(4) * 1 + 1}`)
         this.scene.scene.manager.getScene('HUDScene').scene.restart()
         this.scene.scene.restart()
       })
     } else {
-      TransitionOut(this.scene)
+      TransitionOut(this.scene.scene.manager.getScene('HUDScene'))
       this.scene.time.delayedCall(750, () => {
         this.scene.scene.stop('GameScene')
         this.scene.scene.stop('HUDScene')

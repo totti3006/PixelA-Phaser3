@@ -1,6 +1,6 @@
-import { DudeStateName } from '../../constants/StateName'
-import IState from '../../interfaces/state.interface'
-import Dude from './Dude'
+import { DudeStateName } from '../../../constants/StateName'
+import IState from '../../../interfaces/state.interface'
+import Dude from '../Dude'
 
 class WallJump extends IState {
   private player: Dude
@@ -66,7 +66,7 @@ class WallJump extends IState {
       (this.player.getKeys()?.get('LEFT')?.isDown && !this.player.flipX)
     ) {
       this.player.getState().advance(DudeStateName.fall)
-    } 
+    }
 
     if (this.player.body.onFloor()) {
       if (this.player.flipX) {

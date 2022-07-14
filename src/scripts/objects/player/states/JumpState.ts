@@ -1,6 +1,6 @@
-import { DudeStateName } from '../../constants/StateName'
-import IState from '../../interfaces/state.interface'
-import Dude from './Dude'
+import { DudeStateName } from '../../../constants/StateName'
+import IState from '../../../interfaces/state.interface'
+import Dude from '../Dude'
 
 class JumpState extends IState {
   private player: Dude
@@ -46,10 +46,6 @@ class JumpState extends IState {
       }
     }
 
-    // if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
-    //   this.dJump = true
-    // }
-
     if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
       this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(8, 2)
 
@@ -63,8 +59,8 @@ class JumpState extends IState {
         this.moveTimer = this.player.scene.time.delayedCall(50, () => {
           this.player.body.setVelocityX(0)
           this.player.body.setAccelerationX(0)
-      })
-    }
+        })
+      }
     }
 
     /*
@@ -78,16 +74,7 @@ class JumpState extends IState {
      * Moving to Fall State
      */
     if (this.player.body.velocity.y > 0) {
-      // if (
-      //   this.player.body.blocked.left ||
-      //   this.player.body.blocked.right ||
-      //   this.player.body.touching.right ||
-      //   this.player.body.touching.left
-      // ) {
-      //   this.player.getState().advance(DudeStateName.wjump)
-      // } else {
       this.player.getState().advance(DudeStateName.fall, this.dJump)
-      // }
     }
   }
 

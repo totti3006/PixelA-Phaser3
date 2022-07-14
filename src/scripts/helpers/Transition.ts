@@ -3,8 +3,8 @@ const TransitionIn = (scene: Phaser.Scene): void => {
   let blocks: Phaser.GameObjects.Group = scene.add.group({ key: 'transition', repeat: 312 }) // 24 13
 
   Phaser.Actions.GridAlign(blocks.getChildren(), {
-    x: 0,
-    y: 0,
+    x: scene.cameras.main.worldView.x,
+    y: scene.cameras.main.worldView.y,
     width: 24,
     cellWidth: 22,
     cellHeight: 22
@@ -33,8 +33,8 @@ const TransitionOut = (scene: Phaser.Scene): void => {
   let blocks: Phaser.GameObjects.Group = scene.add.group({ key: 'transition', repeat: 312, setScale: { x: 0, y: 0 } }) // 24 13
 
   Phaser.Actions.GridAlign(blocks.getChildren(), {
-    x: 0,
-    y: 0,
+    x: scene.cameras.main.worldView.x,
+    y: scene.cameras.main.worldView.y,
     width: 24,
     cellWidth: 22,
     cellHeight: 22

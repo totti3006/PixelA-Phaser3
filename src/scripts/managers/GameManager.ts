@@ -8,201 +8,125 @@ import Landmark from '../objects/Landmark'
 import Bullet from '../objects/player/Bullet'
 import Dude from '../objects/player/Dude'
 import Spikes from '../objects/traps/Spikes'
+import PlayScene from '../scenes/PlayScene'
 
 type GameObj = Phaser.Types.Physics.Arcade.GameObjectWithBody
 
 class GameManager {
-  private currentScene: Phaser.Scene
-  private obj: {}
+  private scene: PlayScene
 
-  public terrainLayer: Phaser.Tilemaps.TilemapLayer
-  private player: Dude
-  private boxes: Phaser.GameObjects.Group
-  private fruits: Phaser.GameObjects.Group
-  private traps: Phaser.GameObjects.Group
-  private projectiles: Phaser.GameObjects.Group
-  private mobs: Phaser.GameObjects.Group
-  private bars: Phaser.GameObjects.Group
-  private landmark: Phaser.GameObjects.Group
-  private mobProjectiles: Phaser.GameObjects.Group
-
-  constructor(scene: Phaser.Scene, obj: any) {
-    this.currentScene = scene
-    this.obj = obj
-
-    this.terrainLayer = obj.terrainLayer
-    this.player = obj.player
-    this.boxes = obj.boxes
-    this.fruits = obj.fruits
-    this.traps = obj.traps
-    this.projectiles = obj.projectiles
-    this.mobs = obj.mobs
-    this.bars = obj.bars
-    this.landmark = obj.landmark
-    this.mobProjectiles = obj.mobProjectiles
+  constructor(scene: PlayScene) {
+    this.scene = scene
 
     // *****************************************************************
     // COLLIDERS
     // *****************************************************************
 
-    this.currentScene.physics.add.collider(this.player, this.terrainLayer)
-    this.currentScene.physics.add.overlap(this.player.virtualPlayer, this.terrainLayer, (a, b) => {
+    this.scene.physics.add.collider(this.scene.player, this.scene.terrainLayer)
+    this.scene.physics.add.overlap(this.scene.player.virtualPlayer, this.scene.terrainLayer, (a, b) => {
       if (b instanceof Phaser.Tilemaps.Tile && a instanceof Phaser.GameObjects.Image) {
         if (b.index >= 0) {
-          this.player.overlapRight = a.x < b.getCenterX() || this.player.overlapRight
-          this.player.overlapLeft = a.x > b.getCenterX() || this.player.overlapLeft
+          this.scene.player.overlapRight = a.x < b.getCenterX() || this.scene.player.overlapRight
+          this.scene.player.overlapLeft = a.x > b.getCenterX() || this.scene.player.overlapLeft
           return
         }
       }
     })
 
-    this.currentScene.physics.add.overlap(this.player.virtualPlayer, this.boxes, (a, b) => {
+    this.scene.physics.add.overlap(this.scene.player.virtualPlayer, this.scene.boxes, (a, b) => {
       if (b instanceof Phaser.GameObjects.Sprite && a instanceof Phaser.GameObjects.Image) {
-        this.player.overlapRight = a.x < b.x || this.player.overlapRight
-        this.player.overlapLeft = a.x > b.x || this.player.overlapLeft
+        this.scene.player.overlapRight = a.x < b.x || this.scene.player.overlapRight
+        this.scene.player.overlapLeft = a.x > b.x || this.scene.player.overlapLeft
       }
     })
 
-    this.currentScene.physics.add.collider(this.player, this.bars)
-    this.currentScene.physics.add.overlap(
-      this.player,
-      this.landmark,
-      this.handleLandmarkOverlap,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.collider(this.landmark, this.terrainLayer)
-    this.currentScene.physics.add.collider(
-      this.player,
-      this.boxes,
-      this.handlePlayerHitBox,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.overlap(
-      this.player,
-      this.traps,
-      this.handlePlayerHitTrap,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.overlap(
-      this.player,
-      this.fruits,
-      this.handleFruitOverlap,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.collider(
-      this.projectiles,
-      this.terrainLayer,
-      this.handleProjectileCollide,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.collider(
-      this.projectiles,
-      this.boxes,
-      this.handleProjectileCollide,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.collider(this.mobs, this.terrainLayer)
-    this.currentScene.physics.add.overlap(
-      this.player,
-      this.mobs,
-      this.handlePlayerMobsOverlap,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.overlap(
-      this.projectiles,
-      this.mobs,
-      this.handleProjectileCollideMobs,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.overlap(
-      this.player,
-      this.mobProjectiles,
-      this.handlePlayerHitProjectile,
-      undefined,
-      this.currentScene
-    )
-    this.currentScene.physics.add.collider(
-      this.mobProjectiles,
-      this.terrainLayer,
-      this.handleProjectileCollide,
-      undefined,
-      this.currentScene
-    )
+    this.scene.physics.add.collider(this.scene.player, this.scene.bars)
+    this.scene.physics.add.overlap(this.scene.player, this.scene.landmark, this.handleLandmarkOverlap)
+    this.scene.physics.add.collider(this.scene.landmark, this.scene.terrainLayer)
+    this.scene.physics.add.collider(this.scene.player, this.scene.boxes, this.handlePlayerHitBox)
+    this.scene.physics.add.overlap(this.scene.player, this.scene.traps, this.handlePlayerHitTrap)
+    this.scene.physics.add.overlap(this.scene.player, this.scene.fruits, this.handleFruitOverlap)
+    this.scene.physics.add.collider(this.scene.projectiles, this.scene.terrainLayer, this.handleProjectileCollide)
+    this.scene.physics.add.collider(this.scene.projectiles, this.scene.boxes, this.handleProjectileCollide)
+    this.scene.physics.add.collider(this.scene.mobs, this.scene.terrainLayer)
+    this.scene.physics.add.overlap(this.scene.player, this.scene.mobs, this.handlePlayerMobsOverlap)
+    this.scene.physics.add.overlap(this.scene.projectiles, this.scene.mobs, this.handleProjectileCollideMobs)
+    this.scene.physics.add.overlap(this.scene.player, this.scene.mobProjectiles, this.handlePlayerHitProjectile)
+    this.scene.physics.add.collider(this.scene.mobProjectiles, this.scene.terrainLayer, this.handleProjectileCollide)
   }
 
   private handlePlayerHitProjectile = (player: GameObj, projectile: GameObj): void => {
-    let _player = player as Dude
-    let _projectile = projectile as PlantBullet
+    if (!(player instanceof Dude) || !(projectile instanceof PlantBullet)) {
+      return
+    }
 
-    _player.gotHit(_projectile.getSpeed())
-    _projectile.hitObstacle()
+    player.gotHit(projectile.getSpeed())
+    projectile.hitObstacle()
   }
 
   private handleLandmarkOverlap = (player: GameObj, landmark: GameObj): void => {
-    let _player = player as Dude
-    let _landmark = landmark as Landmark
+    if (!(player instanceof Dude) || !(landmark instanceof Landmark)) {
+      return
+    }
 
-    _landmark.checkIn()
+    landmark.checkIn()
   }
 
   private handleProjectileCollideMobs = (projectile: GameObj, mob: GameObj): void => {
-    let _projectile = projectile as Bullet
-    let _mob = mob as Mob
-
-    if (_mob.getVulnerable()) {
-      _mob.gotHitFromBullet(_projectile.body.velocity.x)
+    if (!(projectile instanceof Bullet) || !(mob instanceof Mob)) {
+      return
     }
-    _projectile.hitObstacle()
+
+    if (mob.getVulnerable()) {
+      mob.gotHitFromBullet(projectile.body.velocity.x)
+    }
+    projectile.hitObstacle()
   }
 
   private handlePlayerMobsOverlap = (player: GameObj, mob: GameObj): void => {
-    let _player = player as Dude
-    let _mob = mob as Mob
+    if (!(player instanceof Dude) || !(mob instanceof Mob)) {
+      return
+    }
 
-    if (_player.body.touching.down && _mob.body.touching.up) {
+    if (player.body.touching.down && mob.body.touching.up) {
       // player hit enemy on top
-      _player.bounceUpAfterHitTargetOnHead()
-      if (_mob.getVulnerable()) {
-        _mob.gotHitOnHead()
+      player.bounceUpAfterHitTargetOnHead()
+      if (mob.getVulnerable()) {
+        mob.gotHitOnHead()
       }
     } else {
-      _player.gotHit(_mob.getSpeed())
+      player.gotHit(mob.getSpeed())
     }
   }
 
   private handlePlayerHitTrap = (player: GameObj, trap: GameObj): void => {
-    let _player = player as Dude
-    let _trap = trap as Spikes
+    if (!(player instanceof Dude) || !(trap instanceof Spikes)) {
+      return
+    }
 
-    _player.gotHit(0)
+    player.gotHit(0)
   }
 
   private handlePlayerHitBox = (player: GameObj, box: GameObj): void => {
-    let _player = player as Dude
-    let _box = box as Box
+    if (!(player instanceof Dude) || !(box instanceof Box)) {
+      return
+    }
 
-    if ((_box.body.touching.down || _box.body.touching.up) && _box.active) {
-      if (_box.body.touching.up) _player.bounceUpAfterHitTargetOnHead()
-      this.currentScene.physics.world.disable(_box)
-      _box.playHitAnims()
-      this.fruits.add(_box.spawnBoxContent())
-      _box.popUpFruit(this.terrainLayer)
+    if ((box.body.touching.down || box.body.touching.up) && box.active) {
+      if (box.body.touching.up) player.bounceUpAfterHitTargetOnHead()
+      this.scene.physics.world.disable(box)
+      box.playHitAnims()
+      this.scene.fruits.add(box.spawnBoxContent())
+      box.popUpFruit(this.scene.terrainLayer)
     }
   }
 
   private handleFruitOverlap = (player: GameObj, fruit: GameObj): void => {
-    let _player = player as Dude
-    let _fruit = fruit as Fruit
+    if (!(player instanceof Dude) || !(fruit instanceof Fruit)) {
+      return
+    }
 
-    _fruit.collected()
+    fruit.collected()
   }
 
   private handleProjectileCollide = (projectile: GameObj, terrain): void => {

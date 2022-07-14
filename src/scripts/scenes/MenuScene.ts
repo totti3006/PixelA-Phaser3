@@ -50,8 +50,6 @@ class MenuScene extends Phaser.Scene {
     })
 
     this.scaleUp.play()
-
-    // this.add.text(this.sys.canvas.width / 2 - 70, 130, 'Press S to play')
   }
 
   update(): void {
@@ -65,6 +63,7 @@ class MenuScene extends Phaser.Scene {
   private initGlobalDataManager(): void {
     this.registry.set('room', 'room1')
     this.registry.set('score', 0)
+    this.registry.set('mapHeight', 0)
   }
 
   private addButtons(): void {

@@ -1,6 +1,6 @@
-import { DudeStateName } from '../../constants/StateName'
-import IState from '../../interfaces/state.interface'
-import Dude from './Dude'
+import { DudeStateName } from '../../../constants/StateName'
+import IState from '../../../interfaces/state.interface'
+import Dude from '../Dude'
 
 class FallState extends IState {
   private player: Dude
@@ -81,8 +81,7 @@ class FallState extends IState {
       }
     }
 
-    if ((this.player.overlapLeft && this.player.flipX) || (this.player.overlapRight && !this.player.flipX) 
-    ) {
+    if ((this.player.overlapLeft && this.player.flipX) || (this.player.overlapRight && !this.player.flipX)) {
       this.player.getState().advance(DudeStateName.wjump)
     }
   }
