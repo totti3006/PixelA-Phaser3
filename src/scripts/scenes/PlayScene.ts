@@ -54,10 +54,6 @@ class PlayScene extends Phaser.Scene {
     this.terrainLayer.setName('terrainLayer')
     this.terrainLayer.setCollisionByProperty({ collide: true })
 
-    // this.terrainLayer.forEachTile(tile => {
-    //   console.log(tile.collides)
-    // })
-
     // DebugGraphics(this)
 
     // *************
@@ -87,8 +83,6 @@ class PlayScene extends Phaser.Scene {
     // *****************************************************************
     this.cameras.main.startFollow(this.player)
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
-
-    this.cameras.main.fadeIn(500, 0, 0, 0)
   }
 
   private initObjectsGroup(): void {

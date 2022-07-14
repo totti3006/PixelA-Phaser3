@@ -1,3 +1,5 @@
+import { TransitionIn, TransitionOut } from '../helpers/Transition'
+
 class MenuScene extends Phaser.Scene {
   private startKey: Phaser.Input.Keyboard.Key
 
@@ -96,14 +98,13 @@ class MenuScene extends Phaser.Scene {
       yoyo: true,
       repeat: 0,
       onComplete: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0)
+        TransitionOut(this)
+        this.time.delayedCall(750, () => {
+          this.scene.start('HUDScene')
+          this.scene.start('PlayScene')
+          this.scene.bringToTop('HUDScene')
+        })
       }
-    })
-
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (camera, effect) => {
-      this.scene.start('HUDScene')
-      this.scene.start('PlayScene')
-      this.scene.bringToTop('HUDScene')
     })
 
     moveTween = this.add.tween({

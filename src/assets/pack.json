@@ -97,6 +97,11 @@
         "url": "./assets/sprites/plant/Bullet.png"
       },
       {
+        "type": "image",
+        "key": "transition",
+        "url": "./assets/images/Transition.png"
+      },
+      {
         "type": "spritesheet",
         "key": "box1-break",
         "url": "./assets/sprites/box1/Break.png",

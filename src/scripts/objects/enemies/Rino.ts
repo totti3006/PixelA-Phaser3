@@ -144,7 +144,7 @@ class Rino extends Mob {
         ease: 'Power0',
         onComplete: () => {
           this.landmark.add(
-            new Landmark({ scene: this.scene, x: this.x, y: this.y - 50, texture: 'checkpoint-noflag' })
+            new Landmark({ scene: this.scene, x: this.x, y: this.y - 20, texture: 'checkpoint-noflag' })
           )
           this.isDead()
         }

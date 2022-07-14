@@ -1,4 +1,5 @@
 import * as setting from '../constants/Setting'
+import { TransitionIn, TransitionOut } from '../helpers/Transition'
 
 class HubScene extends Phaser.Scene {
   private textElements: Map<string, Phaser.GameObjects.Text>
@@ -22,20 +23,29 @@ class HubScene extends Phaser.Scene {
       ['SCORE', this.addText(this.sys.canvas.width / 2 - 30, 16, `Score ${this.registry.get('score')}`)]
     ])
 
-    this.addRestartButton()
-    if (this.registry.get('room') !== setting.finalRoom) this.addNextButton()
-    if (this.registry.get('room') !== 'room1') this.addPrevButton()
+    this.restartButton = this.add.image(this.sys.canvas.width / 2 + 180, 24, 'button-restart')
+    this.addTweenButton(this.restartButton, this.handleRestart)
+
+    if (this.registry.get('room') !== setting.finalRoom) {
+      this.nextButton = this.add.image(this.restartButton.x - 30, 24, 'button-next')
+      this.addTweenButton(this.nextButton, this.handleNext)
+    }
+    if (this.registry.get('room') !== 'room1') {
+      this.prevButton = this.add.image(this.restartButton.x - 50, 24, 'button-previous')
+      this.addTweenButton(this.prevButton, this.handlePrev)
+    }
+
+    TransitionIn(this)
 
     const level = this.scene.get('PlayScene')
     level.events.on('scoreChanged', this.updateScore, this)
   }
 
-  private addRestartButton(): void {
+  private addTweenButton(button: Phaser.GameObjects.Image, callback): void {
     let upTween: Phaser.Tweens.Tween
     let moveTween: Phaser.Tweens.Tween
 
-    this.restartButton = this.add
-      .image(this.sys.canvas.width / 2 + 180, 24, 'button-restart')
+    button
       .setInteractive()
       .on('pointerup', pointer => {
         moveTween.stop()
@@ -46,23 +56,18 @@ class HubScene extends Phaser.Scene {
       })
 
     upTween = this.add.tween({
-      targets: this.restartButton,
-      y: { from: this.restartButton.y, to: this.restartButton.y + 2 },
+      targets: button,
+      y: { from: button.y, to: button.y + 2 },
       duration: 100,
       paused: true,
       yoyo: true,
       repeat: 0,
-      onComplete: () => {
-        this.registry.values.score = 0
-        this.events.emit('scoreChanged')
-        this.scene.manager.getScene('PlayScene').scene.restart()
-        this.scene.restart()
-      }
+      onComplete: callback
     })
 
     moveTween = this.add.tween({
-      targets: this.restartButton,
-      y: { from: this.restartButton.y, to: this.restartButton.y + 1 },
+      targets: button,
+      y: { from: button.y, to: button.y + 1 },
       duration: 100,
       paused: true,
       yoyo: true,
@@ -70,85 +75,35 @@ class HubScene extends Phaser.Scene {
     })
   }
 
-  private addNextButton(): void {
-    let upTween: Phaser.Tweens.Tween
-    let moveTween: Phaser.Tweens.Tween
-
-    this.nextButton = this.add
-      .image(this.restartButton.x - 30, 24, 'button-next')
-      .setInteractive()
-      .on('pointerup', pointer => {
-        moveTween.stop()
-        upTween.play()
-      })
-      .on('pointermove', pointer => {
-        if (!upTween.isPlaying()) moveTween.play()
-      })
-
-    upTween = this.add.tween({
-      targets: this.nextButton,
-      y: { from: this.nextButton.y, to: this.nextButton.y + 2 },
-      duration: 100,
-      paused: true,
-      yoyo: true,
-      repeat: 0,
-      onComplete: () => {
-        this.registry.values.score = 0
-        this.registry.set('room', `room${this.registry.get('room').slice(4) * 1 + 1}`)
-        this.events.emit('scoreChanged')
-        this.scene.manager.getScene('PlayScene').scene.restart()
-        this.scene.restart()
-      }
-    })
-
-    moveTween = this.add.tween({
-      targets: this.nextButton,
-      y: { from: this.nextButton.y, to: this.nextButton.y + 1 },
-      duration: 100,
-      paused: true,
-      yoyo: true,
-      repeat: 0
+  private handleRestart = (): void => {
+    this.registry.values.score = 0
+    this.events.emit('scoreChanged')
+    TransitionOut(this)
+    this.time.delayedCall(750, () => {
+      this.scene.manager.getScene('PlayScene').scene.restart()
+      this.scene.restart()
     })
   }
 
-  private addPrevButton(): void {
-    let upTween: Phaser.Tweens.Tween
-    let moveTween: Phaser.Tweens.Tween
-
-    this.prevButton = this.add
-      .image(this.restartButton.x - 50, 24, 'button-previous')
-      .setInteractive()
-      .on('pointerup', pointer => {
-        moveTween.stop()
-        upTween.play()
-      })
-      .on('pointermove', pointer => {
-        if (!upTween.isPlaying()) moveTween.play()
-      })
-
-    upTween = this.add.tween({
-      targets: this.prevButton,
-      y: { from: this.prevButton.y, to: this.prevButton.y + 2 },
-      duration: 100,
-      paused: true,
-      yoyo: true,
-      repeat: 0,
-      onComplete: () => {
-        this.registry.values.score = 0
-        this.registry.set('room', `room${this.registry.get('room').slice(4) * 1 - 1}`)
-        this.events.emit('scoreChanged')
-        this.scene.manager.getScene('PlayScene').scene.restart()
-        this.scene.restart()
-      }
+  private handleNext = (): void => {
+    this.registry.values.score = 0
+    this.registry.set('room', `room${this.registry.get('room').slice(4) * 1 + 1}`)
+    this.events.emit('scoreChanged')
+    TransitionOut(this)
+    this.time.delayedCall(750, () => {
+      this.scene.manager.getScene('PlayScene').scene.restart()
+      this.scene.restart()
     })
+  }
 
-    moveTween = this.add.tween({
-      targets: this.prevButton,
-      y: { from: this.prevButton.y, to: this.prevButton.y + 1 },
-      duration: 100,
-      paused: true,
-      yoyo: true,
-      repeat: 0
+  private handlePrev = (): void => {
+    this.registry.values.score = 0
+    this.registry.set('room', `room${this.registry.get('room').slice(4) * 1 - 1}`)
+    this.events.emit('scoreChanged')
+    TransitionOut(this)
+    this.time.delayedCall(750, () => {
+      this.scene.manager.getScene('PlayScene').scene.restart()
+      this.scene.restart()
     })
   }
 

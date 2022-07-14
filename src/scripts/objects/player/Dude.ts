@@ -17,7 +17,7 @@ class Dude extends Phaser.GameObjects.Sprite {
 
   private keys: Map<string, Phaser.Input.Keyboard.Key>
 
-  private rect: GameObj
+  // private rect: GameObj
 
   private onCollideWall: boolean
   public virtualPlayer: Phaser.Physics.Arcade.Image
@@ -36,9 +36,9 @@ class Dude extends Phaser.GameObjects.Sprite {
     return this.dudeState
   }
 
-  public getVirtualBody(): GameObj {
-    return this.rect
-  }
+  // public getVirtualBody(): GameObj {
+  //   return this.rect
+  // }
 
   public isCollideWall(): boolean {
     return this.onCollideWall
@@ -71,12 +71,11 @@ class Dude extends Phaser.GameObjects.Sprite {
   }
 
   private create2ndBody(): void {
-    
     // @ts-ignore
     const virtualPlayer = this.scene.physics.add.image()
     virtualPlayer.body.setSize(this.width * 0.7, this.height * 0.8)
     virtualPlayer.body.setAllowGravity(false)
-    virtualPlayer.setDebugBodyColor(0xffff00);
+    virtualPlayer.setDebugBodyColor(0xffff00)
     this.virtualPlayer = virtualPlayer
   }
 
@@ -101,7 +100,7 @@ class Dude extends Phaser.GameObjects.Sprite {
     // this.body.maxVelocity.y = 500
     this.body.setSize(this.width * 0.6, this.height * 0.95).setOffset(6, 2)
 
-    this.rect = new VirtualBody(this.scene, this, this.x, this.y + 5, this.width * 0.65, this.height * 0.8, 0xff0000)
+    // this.rect = new VirtualBody(this.scene, this, this.x, this.y + 5, this.width * 0.65, this.height * 0.8, 0xff0000)
   }
 
   private addKey(key: string): Phaser.Input.Keyboard.Key {
@@ -109,7 +108,7 @@ class Dude extends Phaser.GameObjects.Sprite {
   }
 
   update(): void {
-    this.updateVirtualBody()
+    // this.updateVirtualBody()
 
     // console.log(this.dudeState.currentState().getName())
 
@@ -132,8 +131,8 @@ class Dude extends Phaser.GameObjects.Sprite {
       this.scene.registry.values.score = 0
       this.scene.events.emit('scoreChanged')
     }
-    
-    this.virtualPlayer.setVelocity(0,0)
+
+    this.virtualPlayer.setVelocity(0, 0)
     this.virtualPlayer.body.position.set(this.body.x - 1.5, this.body.y + 3)
     this.virtualPlayer.body.updateCenter()
 
@@ -141,31 +140,31 @@ class Dude extends Phaser.GameObjects.Sprite {
     this.overlapLeft = false
   }
 
-  updateVirtualBody(): void {
-    this.centerBodyOnBody(this.rect.body as Phaser.Physics.Arcade.Body, this.body)
-    this.rect.body.velocity.copy(this.body.velocity)
+  // updateVirtualBody(): void {
+  //   this.centerBodyOnBody(this.rect.body as Phaser.Physics.Arcade.Body, this.body)
+  //   this.rect.body.velocity.copy(this.body.velocity)
 
-    let collideTerrain = this.scene.physics.add.collider(this.rect, this.terrainLayer, (rect, terrain) => {
-      // console.log('collide')
-      if (rect.body.blocked.right) {
-        rect.body.velocity.x = 10
-        console.log('hit right')
-      }
+  //   let collideTerrain = this.scene.physics.add.collider(this.rect, this.terrainLayer, (rect, terrain) => {
+  //     // console.log('collide')
+  //     if (rect.body.blocked.right) {
+  //       rect.body.velocity.x = 10
+  //       console.log('hit right')
+  //     }
 
-      if (rect.body.blocked.left) {
-        rect.body.velocity.x = -20
-        console.log('hit left')
-      }
-    })
+  //     if (rect.body.blocked.left) {
+  //       rect.body.velocity.x = -20
+  //       console.log('hit left')
+  //     }
+  //   })
 
-    this.scene.time.delayedCall(100, () => {
-      collideTerrain.destroy()
-    })
-  }
+  //   this.scene.time.delayedCall(100, () => {
+  //     collideTerrain.destroy()
+  //   })
+  // }
 
-  centerBodyOnBody(a: Phaser.Physics.Arcade.Body, b: Phaser.Physics.Arcade.Body): void {
-    a.position.set(b.x + b.halfWidth - a.halfWidth, b.y + b.halfHeight - a.halfHeight)
-  }
+  // centerBodyOnBody(a: Phaser.Physics.Arcade.Body, b: Phaser.Physics.Arcade.Body): void {
+  //   a.position.set(b.x + b.halfWidth - a.halfWidth, b.y + b.halfHeight - a.halfHeight)
+  // }
 
   throwDart(): void {
     let dart = new Bullet(this.scene, this.projectile, this)
