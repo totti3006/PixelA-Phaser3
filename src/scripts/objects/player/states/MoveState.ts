@@ -38,6 +38,8 @@ class MoveState extends IState {
   }
 
   onStateExecution(param?: any): void {
+    this.player.dustAnimation.playMove()
+
     if (this.player.getKeys().get('JUMP')?.isUp) {
       this.allowJump = true
     }
@@ -84,6 +86,7 @@ class MoveState extends IState {
   }
 
   onStateExit(param?: any): void {
+    this.player.dustAnimation.resetCountFrame()
     this.allowJump = false
   }
 }

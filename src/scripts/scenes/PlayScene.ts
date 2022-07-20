@@ -1,14 +1,7 @@
 import DebugGraphics from '../helpers/DebugGraphics'
 import GameManager from '../managers/GameManager'
-import Box from '../objects/Box'
-import Mushroom from '../objects/enemies/Mushroom'
-import Plant from '../objects/enemies/Plant'
-import Rino from '../objects/enemies/Rino'
-import Fruit from '../objects/Fruit'
-import Landmark from '../objects/Landmark'
 import ObjectsCreator from '../objects/ObjectsCreator'
 import Dude from '../objects/player/Dude'
-import Spikes from '../objects/traps/Spikes'
 
 type GameObj = Phaser.Types.Physics.Arcade.GameObjectWithBody
 

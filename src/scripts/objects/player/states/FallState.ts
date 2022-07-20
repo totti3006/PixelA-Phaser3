@@ -40,6 +40,7 @@ class FallState extends IState {
 
     if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
       if (!this.isDoubleJump) {
+        this.player.dustAnimation.playJump()
         this.isDoubleJump = true
         this.player.body.setVelocityY(-350)
         this.player.anims.play('mask-djump-anims')
@@ -58,11 +59,8 @@ class FallState extends IState {
       this.player.body.setAccelerationX(0)
     }
 
-    // if (this.player.isCollideWall()) {
-    //   this.player.getState().advance(DudeStateName.wjump)
-    // }
-
     if (this.player.body.onFloor()) {
+      this.player.dustAnimation.playHitGround()
       if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
         /*
          * Moving to Move State right
@@ -81,6 +79,9 @@ class FallState extends IState {
       }
     }
 
+    /*
+     * Moving to Wall Jump State
+     */
     if ((this.player.overlapLeft && this.player.flipX) || (this.player.overlapRight && !this.player.flipX)) {
       this.player.getState().advance(DudeStateName.wjump)
     }

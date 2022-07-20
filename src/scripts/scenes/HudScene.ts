@@ -1,5 +1,5 @@
 import * as setting from '../constants/Setting'
-import { TransitionIn, TransitionOut } from '../helpers/Transition'
+import Transition from '../helpers/Transition'
 
 class HubScene extends Phaser.Scene {
   private textElements: Map<string, Phaser.GameObjects.Text>
@@ -8,10 +8,16 @@ class HubScene extends Phaser.Scene {
   private nextButton: Phaser.GameObjects.Image
   private prevButton: Phaser.GameObjects.Image
 
+  private transition: Transition
+
   constructor() {
     super({
       key: 'HUDScene'
     })
+  }
+
+  init(): void {
+    this.transition = new Transition(this)
   }
 
   create(): void {
@@ -35,7 +41,7 @@ class HubScene extends Phaser.Scene {
       this.addTweenButton(this.prevButton, this.handlePrev)
     }
 
-    TransitionIn(this)
+    this.transition.transitionIn()
 
     const level = this.scene.get('PlayScene')
     level.events.on('scoreChanged', this.updateScore, this)
@@ -78,7 +84,7 @@ class HubScene extends Phaser.Scene {
   private handleRestart = (): void => {
     this.registry.values.score = 0
     this.events.emit('scoreChanged')
-    TransitionOut(this)
+    this.transition.transitionOut()
     this.time.delayedCall(750, () => {
       this.scene.manager.getScene('PlayScene').scene.restart()
       this.scene.restart()
@@ -89,7 +95,7 @@ class HubScene extends Phaser.Scene {
     this.registry.values.score = 0
     this.registry.set('room', `room${this.registry.get('room').slice(4) * 1 + 1}`)
     this.events.emit('scoreChanged')
-    TransitionOut(this)
+    this.transition.transitionOut()
     this.time.delayedCall(750, () => {
       this.scene.manager.getScene('PlayScene').scene.restart()
       this.scene.restart()
@@ -100,7 +106,7 @@ class HubScene extends Phaser.Scene {
     this.registry.values.score = 0
     this.registry.set('room', `room${this.registry.get('room').slice(4) * 1 - 1}`)
     this.events.emit('scoreChanged')
-    TransitionOut(this)
+    this.transition.transitionOut()
     this.time.delayedCall(750, () => {
       this.scene.manager.getScene('PlayScene').scene.restart()
       this.scene.restart()

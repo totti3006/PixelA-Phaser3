@@ -22,9 +22,6 @@ class BootScene extends Phaser.Scene {
   }
 
   create() {
-    // this.scene.start('PlayScene')
-    // this.scene.start('HUDScene')
-    // this.scene.bringToTop('HUDScene')
     this.scene.start('MenuScene')
   }
 }

@@ -1,4 +1,5 @@
 import { DudeStateName } from '../../../constants/StateName'
+import DustAnimation from '../../../helpers/DustAnimation'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
 
@@ -6,6 +7,7 @@ class JumpState extends IState {
   private player: Dude
   private dJump: boolean
   private allowDoubleJump: boolean
+  private moveTimer: Phaser.Time.TimerEvent
 
   constructor(player: Dude) {
     super()
@@ -30,9 +32,9 @@ class JumpState extends IState {
   onStateEnter(param?: any): void {
     this.player.body.setVelocityY(-400)
     this.player.anims.play('mask-jump-anims')
+    this.player.dustAnimation.playJump()
   }
 
-  private moveTimer: Phaser.Time.TimerEvent
   onStateExecution(param?: any): void {
     if (this.player.getKeys()?.get('JUMP')?.isUp) {
       this.allowDoubleJump = true
@@ -40,6 +42,7 @@ class JumpState extends IState {
 
     if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
       if (!this.dJump) {
+        this.player.dustAnimation.playJump()
         this.dJump = true
         this.player.body.setVelocityY(-350)
         this.player.anims.play('mask-djump-anims')

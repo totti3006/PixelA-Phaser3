@@ -1,4 +1,5 @@
 import { DudeStateName } from '../../constants/StateName'
+import DustAnimation from '../../helpers/DustAnimation'
 import { ISpriteConstructor } from '../../interfaces/sprite.interface'
 import Bullet from './Bullet'
 import DudeState from './states/DudeState'
@@ -16,6 +17,8 @@ class Dude extends Phaser.GameObjects.Sprite {
   public virtualPlayer: Phaser.Physics.Arcade.Image
   public overlapLeft: boolean
   public overlapRight: boolean
+
+  public dustAnimation: DustAnimation
 
   public getKeys(): Map<string, Phaser.Input.Keyboard.Key> {
     return this.keys
@@ -49,6 +52,8 @@ class Dude extends Phaser.GameObjects.Sprite {
     this.onCollideWall = false
 
     this.dudeState = new DudeState(this)
+
+    this.dustAnimation = new DustAnimation(this)
 
     this.create2ndBody()
   }

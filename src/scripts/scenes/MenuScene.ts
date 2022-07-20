@@ -1,4 +1,4 @@
-import { TransitionIn, TransitionOut } from '../helpers/Transition'
+import Transition from '../helpers/Transition'
 
 class MenuScene extends Phaser.Scene {
   private startKey: Phaser.Input.Keyboard.Key
@@ -7,6 +7,8 @@ class MenuScene extends Phaser.Scene {
 
   private scaleUp: Phaser.Tweens.Tween
   private scaleDown: Phaser.Tweens.Tween
+
+  private transition: Transition
 
   constructor() {
     super({
@@ -17,6 +19,7 @@ class MenuScene extends Phaser.Scene {
   init(): void {
     this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
     this.startKey.isDown = false
+    this.transition = new Transition(this)
     this.initGlobalDataManager()
   }
 
@@ -97,7 +100,7 @@ class MenuScene extends Phaser.Scene {
       yoyo: true,
       repeat: 0,
       onComplete: () => {
-        TransitionOut(this)
+        this.transition.transitionOut()
         this.time.delayedCall(750, () => {
           this.scene.start('HUDScene')
           this.scene.start('PlayScene')

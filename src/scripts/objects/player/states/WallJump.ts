@@ -30,6 +30,7 @@ class WallJump extends IState {
 
   onStateEnter(param?: any): void {
     this.player.anims.play('mask-walljump-anims')
+    this.player.dustAnimation.playWallJump()
     this.prevOffset = this.player.body.offset.x
     this.prePos = this.player.x
     if (this.player.flipX) {
@@ -69,6 +70,7 @@ class WallJump extends IState {
     }
 
     if (this.player.body.onFloor()) {
+      this.player.dustAnimation.playHitGround()
       if (this.player.flipX) {
         this.player.getState().advance(DudeStateName.idle, 'wj-left')
       } else {
