@@ -1,21 +1,24 @@
-import Plant from './Plant'
+import { IBulletConstructor } from '../../interfaces/bullet.interface'
 
 class PlantBullet extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'plant-bullet')
+  private speed: number
 
-    scene.add.existing(this)
+  constructor(aParams: IBulletConstructor) {
+    super(aParams.scene, aParams.x, aParams.y, aParams.texture)
 
+    this.speed = aParams.bulletProperties.speed
+    this.setFlipX(aParams.bulletProperties.flipX)
+
+    this.scene.add.existing(this)
     this.initSprite()
   }
 
   private initSprite(): void {
     this.setOrigin(0, 0)
       .setScale(1)
-      .setAlpha(0)
-
+      .setAlpha(1)
       .setY(this.y + 8)
 
     this.scene.tweens.add({
@@ -33,6 +36,8 @@ class PlantBullet extends Phaser.GameObjects.Sprite {
       .setAllowGravity(false)
       .setCircle(this.width / 4)
       .setOffset(4, 4)
+
+    this.body.setVelocityX(this.speed)
   }
 
   public getSpeed(): number {

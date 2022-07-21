@@ -5,7 +5,7 @@ import PlantBullet from '../objects/enemies/PlantBullet'
 import Rino from '../objects/enemies/Rino'
 import Fruit from '../objects/Fruit'
 import Landmark from '../objects/Landmark'
-import Bullet from '../objects/player/Bullet'
+import Dart from '../objects/player/Dart'
 import Dude from '../objects/player/Dude'
 import Spikes from '../objects/traps/Spikes'
 import PlayScene from '../scenes/PlayScene'
@@ -73,7 +73,7 @@ class GameManager {
   }
 
   private handleProjectileCollideMobs = (projectile: GameObj, mob: GameObj): void => {
-    if (!(projectile instanceof Bullet) || !(mob instanceof Mob)) {
+    if (!(projectile instanceof Dart) || !(mob instanceof Mob)) {
       return
     }
 
@@ -130,9 +130,11 @@ class GameManager {
   }
 
   private handleProjectileCollide = (projectile: GameObj, terrain): void => {
-    let _projectile = projectile as Bullet | PlantBullet
+    if (!(projectile instanceof Dart || projectile instanceof PlantBullet)) {
+      return
+    }
 
-    _projectile.hitObstacle()
+    projectile.hitObstacle()
   }
 }
 

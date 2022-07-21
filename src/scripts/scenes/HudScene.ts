@@ -1,12 +1,13 @@
 import * as setting from '../constants/Setting'
-import Transition from '../helpers/Transition'
+import Transition from '../animations/Transition'
+import AnimatedButton from '../animations/AnimatedButton'
 
 class HubScene extends Phaser.Scene {
   private textElements: Map<string, Phaser.GameObjects.Text>
 
-  private restartButton: Phaser.GameObjects.Image
-  private nextButton: Phaser.GameObjects.Image
-  private prevButton: Phaser.GameObjects.Image
+  private restartButton: AnimatedButton
+  private nextButton: AnimatedButton
+  private prevButton: AnimatedButton
 
   private transition: Transition
 
@@ -25,21 +26,10 @@ class HubScene extends Phaser.Scene {
 
     this.textElements = new Map([
       ['LEVEL', this.addText(this.sys.canvas.width / 2 - 120, 16, `Room ${this.registry.get('room')[4]}`)],
-
       ['SCORE', this.addText(this.sys.canvas.width / 2 - 30, 16, `Score ${this.registry.get('score')}`)]
     ])
 
-    this.restartButton = this.add.image(this.sys.canvas.width / 2 + 180, 24, 'button-restart')
-    this.addTweenButton(this.restartButton, this.handleRestart)
-
-    if (this.registry.get('room') !== setting.finalRoom) {
-      this.nextButton = this.add.image(this.restartButton.x - 30, 24, 'button-next')
-      this.addTweenButton(this.nextButton, this.handleNext)
-    }
-    if (this.registry.get('room') !== 'room1') {
-      this.prevButton = this.add.image(this.restartButton.x - 50, 24, 'button-previous')
-      this.addTweenButton(this.prevButton, this.handlePrev)
-    }
+    this.createButtons()
 
     this.transition.transitionIn()
 
@@ -47,38 +37,60 @@ class HubScene extends Phaser.Scene {
     level.events.on('scoreChanged', this.updateScore, this)
   }
 
-  private addTweenButton(button: Phaser.GameObjects.Image, callback): void {
-    let upTween: Phaser.Tweens.Tween
-    let moveTween: Phaser.Tweens.Tween
+  private createButtons(): void {
+    this.createRestartButton()
 
-    button
+    if (this.registry.get('room') !== setting.finalRoom) {
+      this.createNextButton()
+    }
+    if (this.registry.get('room') !== 'room1') {
+      this.createPreviousButton()
+    }
+  }
+
+  private createRestartButton(): void {
+    this.restartButton = new AnimatedButton(this, this.sys.canvas.width / 2 + 180, 24, 'button-restart')
+    this.restartButton
+      .setClickMovingRange(2)
+      .setTouchMovingRange(1)
+      .initButton(this.handleRestart)
       .setInteractive()
       .on('pointerup', pointer => {
-        moveTween.stop()
-        upTween.play()
+        this.restartButton.playPointerUp()
       })
       .on('pointermove', pointer => {
-        if (!upTween.isPlaying()) moveTween.play()
+        this.restartButton.playPointerMove()
       })
+  }
 
-    upTween = this.add.tween({
-      targets: button,
-      y: { from: button.y, to: button.y + 2 },
-      duration: 100,
-      paused: true,
-      yoyo: true,
-      repeat: 0,
-      onComplete: callback
-    })
+  private createNextButton(): void {
+    this.nextButton = new AnimatedButton(this, this.restartButton.x - 30, 24, 'button-next')
+    this.nextButton
+      .setClickMovingRange(2)
+      .setTouchMovingRange(1)
+      .initButton(this.handleNext)
+      .setInteractive()
+      .on('pointerup', pointer => {
+        this.nextButton.playPointerUp()
+      })
+      .on('pointermove', pointer => {
+        this.nextButton.playPointerMove()
+      })
+  }
 
-    moveTween = this.add.tween({
-      targets: button,
-      y: { from: button.y, to: button.y + 1 },
-      duration: 100,
-      paused: true,
-      yoyo: true,
-      repeat: 0
-    })
+  private createPreviousButton(): void {
+    this.prevButton = new AnimatedButton(this, this.restartButton.x - 50, 24, 'button-previous')
+    this.prevButton
+      .setClickMovingRange(2)
+      .setTouchMovingRange(1)
+      .initButton(this.handlePrev)
+      .setInteractive()
+      .on('pointerup', pointer => {
+        this.prevButton.playPointerUp()
+      })
+      .on('pointermove', pointer => {
+        this.prevButton.playPointerMove()
+      })
   }
 
   private handleRestart = (): void => {

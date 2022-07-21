@@ -1,8 +1,8 @@
 import { DudeStateName } from '../../constants/StateName'
-import DustAnimation from '../../helpers/DustAnimation'
+import DustAnimation from '../../animations/DustAnimation'
 import { ISpriteConstructor } from '../../interfaces/sprite.interface'
-import Bullet from './Bullet'
 import DudeState from './states/DudeState'
+import Dart from './Dart'
 
 class Dude extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
@@ -113,18 +113,18 @@ class Dude extends Phaser.GameObjects.Sprite {
   }
 
   throwDart(): void {
-    let throwSpeed: number = 450
-    let dart = new Bullet(this.scene, this.x, this.y)
+    let dart = new Dart({
+      scene: this.scene,
+      x: this.x,
+      y: this.y,
+      bulletProperties: {
+        speed: 450 * (this.flipX ? -1 : 1),
+        flipX: !this.flipX
+      },
+      texture: 'darts'
+    })
 
     this.projectile.add(dart)
-
-    if (this.flipX) {
-      dart.body.setVelocityX(-throwSpeed)
-      dart.setFlipX(false)
-    } else {
-      dart.body.setVelocityX(throwSpeed)
-      dart.setFlipX(true)
-    }
   }
 
   bounceUpAfterHitTargetOnHead(): void {

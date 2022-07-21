@@ -3,8 +3,6 @@ import GameManager from '../managers/GameManager'
 import ObjectsCreator from '../objects/ObjectsCreator'
 import Dude from '../objects/player/Dude'
 
-type GameObj = Phaser.Types.Physics.Arcade.GameObjectWithBody
-
 class PlayScene extends Phaser.Scene {
   // tilemap
   private map: Phaser.Tilemaps.Tilemap

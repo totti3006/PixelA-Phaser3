@@ -1,6 +1,6 @@
 import { ISpriteConstructor } from '../interfaces/sprite.interface'
 import * as setting from '../constants/Setting'
-import Transition from '../helpers/Transition'
+import Transition from '../animations/Transition'
 
 class Landmark extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body

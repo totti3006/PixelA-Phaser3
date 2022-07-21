@@ -1,10 +1,16 @@
-class Bullet extends Phaser.GameObjects.Sprite {
+import { IBulletConstructor } from '../../interfaces/bullet.interface'
+
+class Dart extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'darts')
+  private speed: number
 
-    scene.add.existing(this)
+  constructor(aParams: IBulletConstructor) {
+    super(aParams.scene, aParams.x, aParams.y, aParams.texture)
+
+    this.speed = aParams.bulletProperties.speed
+    this.setFlipX(aParams.bulletProperties.flipX)
+    this.scene.add.existing(this)
 
     this.initSprite()
   }
@@ -14,6 +20,7 @@ class Bullet extends Phaser.GameObjects.Sprite {
 
     this.scene.physics.world.enableBody(this)
     this.body.setAllowGravity(false).setCircle(this.width / 2)
+    this.body.setVelocityX(this.speed)
 
     this.play('dart-anims')
   }
@@ -36,4 +43,4 @@ class Bullet extends Phaser.GameObjects.Sprite {
   }
 }
 
-export default Bullet
+export default Dart

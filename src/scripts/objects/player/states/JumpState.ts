@@ -1,5 +1,5 @@
 import { DudeStateName } from '../../../constants/StateName'
-import DustAnimation from '../../../helpers/DustAnimation'
+import DustAnimation from '../../../animations/DustAnimation'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
 
