@@ -12,10 +12,10 @@ const config = {
   backgroundColor: '#ffffff',
   scale: {
     parent: 'phaser-game',
-    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT
+    height: DEFAULT_HEIGHT,
+    zoom: 1.8
   },
   scene: [BootScene, MenuScene, PlayScene, HubScene],
   physics: {
