@@ -1,10 +1,9 @@
 import { DudeStateName } from '../../../constants/StateName'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
+import DudeState from './DudeState'
 
-class DieState extends IState {
-  private player: Dude
-
+class DieState extends DudeState {
   constructor(player: Dude) {
     super()
 

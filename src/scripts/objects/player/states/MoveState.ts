@@ -1,9 +1,9 @@
 import { DudeStateName } from '../../../constants/StateName'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
+import DudeState from './DudeState'
 
-class MoveState extends IState {
-  private player: Dude
+class MoveState extends DudeState {
   private allowJump: boolean
 
   constructor(player: Dude) {
@@ -40,11 +40,11 @@ class MoveState extends IState {
   onStateExecution(param?: any): void {
     this.player.dustAnimation.playMove()
 
-    if (this.player.getKeys().get('JUMP')?.isUp) {
+    if (this.isJumpKeyUp()) {
       this.allowJump = true
     }
 
-    if (this.player.getKeys().get('JUMP')?.isDown && this.allowJump) {
+    if (this.isJumpKeyDown() && this.allowJump) {
       /*
        * Moving to Jump State
        */
@@ -60,24 +60,15 @@ class MoveState extends IState {
       /*
        * Moving to Idle State
        */
-      (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isDown) ||
-      (this.player.getKeys().get('RIGHT')?.isUp && this.player.getKeys().get('LEFT')?.isUp)
+      this.isMovingToIdleState()
     ) {
       this.player.getState().advance(DudeStateName.idle)
-    } else if (
-      this.player.getKeys().get('RIGHT')?.isDown &&
-      this.player.getKeys().get('LEFT')?.isUp &&
-      this.player.flipX
-    ) {
+    } else if (this.isMovingToMoveStateRight()) {
       /*
        * Moving to Move State right
        */
       this.player.getState().advance(DudeStateName.move, 'right')
-    } else if (
-      this.player.getKeys().get('RIGHT')?.isUp &&
-      this.player.getKeys().get('LEFT')?.isDown &&
-      !this.player.flipX
-    ) {
+    } else if (this.isMovingtoMoveStateLeft()) {
       /*
        * Moving to Move State left
        */
@@ -88,6 +79,18 @@ class MoveState extends IState {
   onStateExit(param?: any): void {
     this.player.dustAnimation.resetCountFrame()
     this.allowJump = false
+  }
+
+  private isMovingToIdleState(): boolean {
+    return (this.isRightKeyDown() && this.isLeftKeyDown()) || (this.isRightKeyUp() && this.isLeftKeyUp())
+  }
+
+  private isMovingToMoveStateRight(): boolean {
+    return this.isRightKeyDown() && this.isLeftKeyUp() && this.player.flipX
+  }
+
+  private isMovingtoMoveStateLeft(): boolean {
+    return this.isRightKeyUp() && this.isLeftKeyDown() && !this.player.flipX
   }
 }
 

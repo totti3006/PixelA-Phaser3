@@ -15,13 +15,23 @@ class HubScene extends Phaser.Scene {
     super({
       key: 'HUDScene'
     })
+
+    // console.log('HudScene constructor')
   }
 
   init(): void {
+    // console.log('HudScene init')
+
     this.transition = new Transition(this)
   }
 
+  preload() {
+    // console.log('HudScene preload')
+  }
+
   create(): void {
+    // console.log('HudScene create')
+
     let hudBackground = this.add.image(this.sys.canvas.width / 2, 24, 'hud')
 
     this.textElements = new Map([

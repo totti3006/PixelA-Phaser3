@@ -1,10 +1,9 @@
 import { DudeStateName } from '../../../constants/StateName'
-import DustAnimation from '../../../animations/DustAnimation'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
+import DudeState from './DudeState'
 
-class JumpState extends IState {
-  private player: Dude
+class JumpState extends DudeState {
   private dJump: boolean
   private allowDoubleJump: boolean
   private moveTimer: Phaser.Time.TimerEvent
@@ -36,11 +35,11 @@ class JumpState extends IState {
   }
 
   onStateExecution(param?: any): void {
-    if (this.player.getKeys()?.get('JUMP')?.isUp) {
+    if (this.isJumpKeyUp()) {
       this.allowDoubleJump = true
     }
 
-    if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
+    if (this.isJumpKeyDown() && this.allowDoubleJump) {
       if (!this.dJump) {
         this.player.dustAnimation.playJump()
         this.dJump = true
@@ -49,15 +48,13 @@ class JumpState extends IState {
       }
     }
 
-    if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+    if (this.isRightKeyDown() && this.isLeftKeyUp()) {
       this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(8, 2)
-
       this.player.setFlipX(false)
-    } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+    } else if (this.isLeftKeyDown() && this.isRightKeyUp()) {
       this.player.body.setAccelerationX(-this.player.getAcceleration()).setOffset(6, 2)
-
       this.player.setFlipX(true)
-    } else if (this.player.getKeys().get('RIGHT')?.isUp && this.player.getKeys().get('LEFT')?.isUp) {
+    } else if (this.isRightKeyUp() && this.isLeftKeyUp()) {
       if (!this.moveTimer || this.moveTimer.hasDispatched) {
         this.moveTimer = this.player.scene.time.delayedCall(50, () => {
           this.player.body.setVelocityX(0)

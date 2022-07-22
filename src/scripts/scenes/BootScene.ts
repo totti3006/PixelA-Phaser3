@@ -5,9 +5,17 @@ class BootScene extends Phaser.Scene {
 
   constructor() {
     super({ key: 'BootScene' })
+
+    // console.log('BootScene constructor')
+  }
+
+  init() {
+    // console.log('BootScene init')
   }
 
   preload() {
+    // console.log('BootScene preload')
+
     this.load.on('progress', () => {}, this)
 
     this.load.on(
@@ -22,6 +30,7 @@ class BootScene extends Phaser.Scene {
   }
 
   create() {
+    // console.log('BootScene create')
     this.scene.start('MenuScene')
   }
 }

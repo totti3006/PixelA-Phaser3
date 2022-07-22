@@ -12,16 +12,26 @@ class MenuScene extends Phaser.Scene {
     super({
       key: 'MenuScene'
     })
+
+    // console.log('MenuScene constructor')
   }
 
   init(): void {
+    // console.log('MenuScene init')
+
     this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
     this.startKey.isDown = false
     this.transition = new Transition(this)
     this.initGlobalDataManager()
   }
 
+  preload() {
+    // console.log('MenuScene preload')
+  }
+
   create(): void {
+    // console.log('MenuScene create')
+
     this.add.image(0, 0, 'title').setOrigin(0, 0)
 
     this.playButton = new AnimatedButton(
@@ -45,6 +55,8 @@ class MenuScene extends Phaser.Scene {
   }
 
   update(): void {
+    // console.log('MenuScene update')
+
     if (this.startKey.isDown) {
       this.scene.start('HUDScene')
       this.scene.start('PlayScene')

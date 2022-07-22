@@ -1,9 +1,9 @@
 import { DudeStateName } from '../../../constants/StateName'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
+import DudeState from './DudeState'
 
-class FallState extends IState {
-  private player: Dude
+class FallState extends DudeState {
   private isDoubleJump: boolean
 
   private allowDoubleJump: boolean
@@ -34,11 +34,11 @@ class FallState extends IState {
   }
 
   onStateExecution(param?: any): void {
-    if (this.player.getKeys()?.get('JUMP')?.isUp) {
+    if (this.isJumpKeyUp()) {
       this.allowDoubleJump = true
     }
 
-    if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowDoubleJump) {
+    if (this.isJumpKeyDown() && this.allowDoubleJump) {
       if (!this.isDoubleJump) {
         this.player.dustAnimation.playJump()
         this.isDoubleJump = true
@@ -48,25 +48,25 @@ class FallState extends IState {
       }
     }
 
-    if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+    if (this.isRightKeyDown() && this.isLeftKeyUp()) {
       this.player.body.setAccelerationX(this.player.getAcceleration()).setOffset(8, 2)
       this.player.setFlipX(false)
-    } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+    } else if (this.isLeftKeyDown() && this.isRightKeyUp()) {
       this.player.body.setAccelerationX(-this.player.getAcceleration()).setOffset(6, 2)
       this.player.setFlipX(true)
-    } else if (this.player.getKeys().get('RIGHT')?.isUp && this.player.getKeys().get('LEFT')?.isUp) {
+    } else if ((this.isRightKeyUp() && this.isLeftKeyUp()) || (this.isRightKeyDown() && this.isLeftKeyDown())) {
       this.player.body.setVelocityX(0)
       this.player.body.setAccelerationX(0)
     }
 
     if (this.player.body.onFloor()) {
       this.player.dustAnimation.playHitGround()
-      if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+      if (this.isMovingToMoveStateRight()) {
         /*
          * Moving to Move State right
          */
         this.player.getState().advance(DudeStateName.move, 'right')
-      } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+      } else if (this.isMovingToMoveStateLeft()) {
         /*
          * Moving to Move State left
          */
@@ -82,7 +82,7 @@ class FallState extends IState {
     /*
      * Moving to Wall Jump State
      */
-    if ((this.player.overlapLeft && this.player.flipX) || (this.player.overlapRight && !this.player.flipX)) {
+    if (this.isMovingToWallJumpState()) {
       this.player.getState().advance(DudeStateName.wjump)
     }
   }
@@ -90,6 +90,21 @@ class FallState extends IState {
   onStateExit(param?: any): void {
     this.isDoubleJump = false
     this.allowDoubleJump = false
+  }
+
+  private isMovingToMoveStateRight(): boolean {
+    return this.isRightKeyDown() && this.isLeftKeyUp()
+  }
+
+  private isMovingToMoveStateLeft(): boolean {
+    return this.isLeftKeyDown() && this.isRightKeyUp()
+  }
+
+  private isMovingToWallJumpState(): boolean {
+    return (
+      (this.player.overlapLeft && this.player.flipX && !(this.isRightKeyDown() && this.isLeftKeyDown())) ||
+      (this.player.overlapRight && !this.player.flipX && !(this.isRightKeyDown() && this.isLeftKeyDown()))
+    )
   }
 }
 

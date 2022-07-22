@@ -1,9 +1,9 @@
 import { DudeStateName } from '../../../constants/StateName'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
+import DudeState from './DudeState'
 
-class WallJump extends IState {
-  private player: Dude
+class WallJump extends DudeState {
   private prevOffset: number
   private prePos: number
   private allowJump: boolean
@@ -45,11 +45,11 @@ class WallJump extends IState {
   onStateExecution(param?: any): void {
     this.player.body.setVelocityY(30)
 
-    if (this.player.getKeys()?.get('JUMP')?.isUp) {
+    if (this.isJumpKeyUp()) {
       this.allowJump = true
     }
 
-    if (this.player.getKeys()?.get('JUMP')?.isDown && this.allowJump) {
+    if (this.isJumpKeyDown() && this.allowJump) {
       this.player.getState().advance(DudeStateName.jump)
       if (this.player.flipX) {
         this.player.setFlipX(false)
@@ -58,14 +58,10 @@ class WallJump extends IState {
         this.player.setFlipX(true)
         this.player.body.setVelocityX(-300)
       }
-      this.player.setCollideWall(false)
+
       return
     }
-    if (
-      !(this.player.overlapLeft || this.player.overlapRight) ||
-      (this.player.getKeys()?.get('RIGHT')?.isDown && this.player.flipX) ||
-      (this.player.getKeys()?.get('LEFT')?.isDown && !this.player.flipX)
-    ) {
+    if (this.isMovingToFallState()) {
       this.player.getState().advance(DudeStateName.fall)
     }
 
@@ -83,6 +79,15 @@ class WallJump extends IState {
     this.player.body.setOffset(this.prevOffset, this.player.body.offset.y)
     this.player.setPosition(this.prePos, this.player.y)
     this.allowJump = false
+  }
+
+  private isMovingToFallState(): boolean {
+    return (
+      !(this.player.overlapLeft || this.player.overlapRight) ||
+      (this.isRightKeyDown() && this.player.flipX) ||
+      (this.isLeftKeyDown() && !this.player.flipX) ||
+      (this.isRightKeyDown() && this.isLeftKeyDown())
+    )
   }
 }
 

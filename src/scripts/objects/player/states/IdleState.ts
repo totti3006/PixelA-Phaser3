@@ -1,9 +1,9 @@
 import { DudeStateName } from '../../../constants/StateName'
 import IState from '../../../interfaces/state.interface'
 import Dude from '../Dude'
+import DudeState from './DudeState'
 
-class IdleState extends IState {
-  private player: Dude
+class IdleState extends DudeState {
   private allowJump: boolean
   private wallJump: string
 
@@ -37,11 +37,11 @@ class IdleState extends IState {
   }
 
   onStateExecution(param?: any): void {
-    if (this.player.getKeys().get('JUMP')?.isUp) {
+    if (this.isJumpKeyUp()) {
       this.allowJump = true
     }
 
-    if (this.player.getKeys().get('JUMP')?.isDown && this.allowJump) {
+    if (this.isJumpKeyDown() && this.allowJump) {
       /*
        * Moving to Jump State
        */
@@ -54,26 +54,29 @@ class IdleState extends IState {
        *  Moving to Fall State
        */
       this.player.getState().advance(DudeStateName.fall)
-    } else if (this.player.getKeys().get('RIGHT')?.isDown && this.player.getKeys().get('LEFT')?.isUp) {
+    } else if (this.isMovingToMoveStateRight()) {
       /*
-       *  Moving to Move State
+       *  Moving to Move State Right
        */
       this.player.getState().advance(DudeStateName.move, 'right')
-
-      if (this.wallJump === 'wj-left') {
-        this.player.setCollideWall(false)
-      }
-    } else if (this.player.getKeys().get('LEFT')?.isDown && this.player.getKeys().get('RIGHT')?.isUp) {
+    } else if (this.isMovingToMoveStateLeft()) {
+      /*
+       *  Moving to Move State Left
+       */
       this.player.getState().advance(DudeStateName.move, 'left')
-
-      if (this.wallJump === 'wj-right') {
-        this.player.setCollideWall(false)
-      }
     }
   }
 
   onStateExit(param?: any): void {
     this.allowJump = false
+  }
+
+  private isMovingToMoveStateRight(): boolean {
+    return this.isRightKeyDown() && this.isLeftKeyUp()
+  }
+
+  private isMovingToMoveStateLeft(): boolean {
+    return this.isLeftKeyDown() && this.isRightKeyUp()
   }
 }
 

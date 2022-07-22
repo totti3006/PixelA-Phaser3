@@ -27,9 +27,21 @@ class PlayScene extends Phaser.Scene {
 
   constructor() {
     super({ key: 'PlayScene' })
+
+    // console.log('PlayScene constructor')
+  }
+
+  preload() {
+    // console.log('PlayScene preload')
+  }
+
+  init() {
+    // console.log('PlayScene init')
   }
 
   create() {
+    // console.log('PlayScene create')
+
     this.map = this.make.tilemap({ key: this.registry.get('room') })
     this.terrainTile = this.map.addTilesetImage('terrain', 'terrain')
 
@@ -145,6 +157,7 @@ class PlayScene extends Phaser.Scene {
   }
 
   update() {
+    // console.log('PlayScene update')
     this.player.update()
   }
 }

@@ -1,19 +1,18 @@
 import { DudeStateName } from '../../constants/StateName'
 import DustAnimation from '../../animations/DustAnimation'
 import { ISpriteConstructor } from '../../interfaces/sprite.interface'
-import DudeState from './states/DudeState'
+import DudeStateMachine from './states/DudeStateMachine'
 import Dart from './Dart'
 
 class Dude extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body
 
   private acceleration: number
-  private dudeState: DudeState
+  private dudeState: DudeStateMachine
   private projectile: Phaser.GameObjects.Group
 
   private keys: Map<string, Phaser.Input.Keyboard.Key>
 
-  private onCollideWall: boolean
   public virtualPlayer: Phaser.Physics.Arcade.Image
   public overlapLeft: boolean
   public overlapRight: boolean
@@ -28,16 +27,8 @@ class Dude extends Phaser.GameObjects.Sprite {
     return this.acceleration
   }
 
-  public getState(): DudeState {
+  public getState(): DudeStateMachine {
     return this.dudeState
-  }
-
-  public isCollideWall(): boolean {
-    return this.onCollideWall
-  }
-
-  public setCollideWall(v: boolean): void {
-    this.onCollideWall = v
   }
 
   constructor(aParams: ISpriteConstructor, projectile: Phaser.GameObjects.Group) {
@@ -49,9 +40,7 @@ class Dude extends Phaser.GameObjects.Sprite {
 
     this.acceleration = 700
 
-    this.onCollideWall = false
-
-    this.dudeState = new DudeState(this)
+    this.dudeState = new DudeStateMachine(this)
 
     this.dustAnimation = new DustAnimation(this)
 
