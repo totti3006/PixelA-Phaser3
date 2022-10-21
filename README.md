@@ -1,7 +1,7 @@
 # Pixel A
 
 ## Demo
-$ https://totti3006.github.io/PixelA-Phaser3/
+https://totti3006.github.io/PixelA-Phaser3/
 
 ## Setup
 
